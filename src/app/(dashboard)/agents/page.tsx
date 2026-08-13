@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { agents } from "@/data";
-import { formatRelativeTime } from "@/lib/utils";
+import RelativeTime from "@/components/ui/relative-time";
 import type { AgentStatus } from "@/types";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -86,7 +86,7 @@ export default function AgentsPage() {
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="text-[11px] text-nx-text-disabled font-mono">Last run {formatRelativeTime(agent.lastRun)}</span>
+              <RelativeTime date={agent.lastRun} prefix="Last run " className="text-[11px] text-nx-text-disabled font-mono" />
               <div className="flex items-center gap-1">
                 <button className="p-1.5 rounded-md text-nx-text-muted hover:text-nx-success hover:bg-nx-success-muted transition-colors" aria-label="Run agent">
                   <Play size={14} />

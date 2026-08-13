@@ -46,6 +46,27 @@ class AskRequest(BaseModel):
     question: str = Field(..., min_length=3, max_length=500)
 
 
+@app.get("/")
+def root() -> dict[str, Any]:
+    """Signpost for anyone who opens the base URL in a browser.
+
+    Without this, visiting http://localhost:8000 returns a bare 404 that reads
+    like the server is broken when it is running perfectly.
+    """
+    return {
+        "service": "Nexora Guardian API",
+        "status": "running",
+        "ui": "http://localhost:3000/workspace",
+        "docs": "http://localhost:8000/docs",
+        "endpoints": {
+            "POST /api/ask": "Ask a question; returns the answer and any conflict",
+            "GET /api/health": "Dependency status",
+            "GET /api/documents": "The document library",
+            "GET /api/conflicts": "Persisted conflicts",
+        },
+    }
+
+
 @app.get("/api/health")
 def health() -> dict[str, Any]:
     """Is everything the demo depends on actually up?

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Search, Command, Bell, HelpCircle, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { notifications as notifData } from "@/data";
-import { formatRelativeTime } from "@/lib/utils";
+import RelativeTime from "@/components/ui/relative-time";
 import CommandPalette from "@/components/ui/command-palette";
 import PersonaSwitcher from "@/components/layout/persona-switcher";
 
@@ -76,7 +76,7 @@ export default function TopBar() {
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-medium text-nx-text-primary truncate">{notif.title}</p>
                             <p className="text-xs text-nx-text-muted mt-0.5 line-clamp-2">{notif.description}</p>
-                            <p className="text-[11px] text-nx-text-disabled mt-1 font-mono">{formatRelativeTime(notif.timestamp)}</p>
+                            <RelativeTime date={notif.timestamp} className="text-[11px] text-nx-text-disabled mt-1 font-mono block" />
                           </div>
                         </div>
                       </div>
