@@ -1,0 +1,13 @@
+# Web API
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database
+pymongo
+
+# Config
+python-dotenv
+
+# PDF text extraction
+pypdf
