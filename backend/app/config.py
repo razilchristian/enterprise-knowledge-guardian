@@ -57,7 +57,13 @@ GEMINI_API_KEY = _required(
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta"
 EMBED_MODEL = "gemini-embedding-001"
-CHAT_MODEL = "gemini-2.5-flash"
+
+# Deliberately an alias, not a pinned version. Google retired gemini-2.5-flash
+# for new API keys mid-build; the alias tracks whatever is current, which is
+# the safer failure mode when a demo date is fixed. gemini-3-flash-preview
+# also works if the alias ever misbehaves.
+CHAT_MODEL = "gemini-flash-latest"
+CHAT_MODEL_FALLBACK = "gemini-3-flash-preview"
 
 # gemini-embedding-001 returns 3072 dimensions by default. We request 768:
 # a quarter of the storage on a 512 MB free cluster, faster search, and ample
