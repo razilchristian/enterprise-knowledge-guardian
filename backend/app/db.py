@@ -5,6 +5,7 @@ creating the client once and reusing it is both correct and fastest.
 """
 
 from pymongo import MongoClient
+from pymongo.collection import Collection
 from pymongo.database import Database
 
 from app import config
@@ -29,6 +30,11 @@ def get_client() -> MongoClient:
 def get_db() -> Database:
     """Return the Nexora database handle."""
     return get_client()[config.MONGODB_DB]
+
+
+def collection(name: str) -> Collection:
+    """Return a collection by name. Use the constants in config, not literals."""
+    return get_db()[name]
 
 
 def ping() -> dict:

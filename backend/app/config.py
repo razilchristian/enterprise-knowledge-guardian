@@ -48,3 +48,23 @@ ACTIVITY = "activity"
 
 # Name of the Atlas vector search index on the chunks collection.
 VECTOR_INDEX = "chunk_embedding_index"
+
+# --- Gemini ---
+GEMINI_API_KEY = _required(
+    "GEMINI_API_KEY",
+    "Create one free at https://aistudio.google.com/apikey",
+)
+
+GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta"
+EMBED_MODEL = "gemini-embedding-001"
+CHAT_MODEL = "gemini-2.5-flash"
+
+# gemini-embedding-001 returns 3072 dimensions by default. We request 768:
+# a quarter of the storage on a 512 MB free cluster, faster search, and ample
+# quality for a corpus this size.
+#
+# Reduced-dimension output is truncated rather than re-normalized, so vectors
+# come back with an L2 norm well under 1 (~0.59 at 768). We normalize in
+# app/embeddings.py before storing. EMBED_DIM must equal numDimensions in the
+# Atlas vector index -- if they disagree, every search returns nothing.
+EMBED_DIM = 768
