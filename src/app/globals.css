@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ── NEXORA Design Tokens ── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Background layers */
+  --color-nx-bg: #F7F5F0;
+  --color-nx-surface: #FFFEFB;
+  --color-nx-elevated: #F0ECE5;
+  --color-nx-overlay: #E7E0D6;
+
+  /* Borders */
+  --color-nx-border: #E2DCD2;
+  --color-nx-border-subtle: #EEE9E1;
+  --color-nx-border-strong: #CFC4B5;
+
+  /* Text */
+  --color-nx-text-primary: #292532;
+  --color-nx-text-secondary: #5F5968;
+  --color-nx-text-muted: #8A8390;
+  --color-nx-text-disabled: #B6AFB8;
+
+  /* Accents */
+  --color-nx-accent: #5D457C;
+  --color-nx-accent-hover: #493564;
+  --color-nx-cyan: #3E8A7C;
+  --color-nx-success: #277C67;
+  --color-nx-warning: #B96B35;
+  --color-nx-danger: #B94B57;
+
+  /* Accent with opacity */
+  --color-nx-accent-muted: #5D457C16;
+  --color-nx-success-muted: #277C6715;
+  --color-nx-warning-muted: #B96B3518;
+  --color-nx-danger-muted: #B94B5715;
+  --color-nx-cyan-muted: #3E8A7C16;
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base Styles ── */
+* {
+  border-color: var(--color-nx-border);
+}
+
+html {
+  background: var(--color-nx-bg);
+  color: var(--color-nx-text-primary);
+  font-family: var(--font-sans);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 90% -5%, rgba(93, 69, 124, 0.08), transparent 29rem),
+    radial-gradient(circle at -8% 96%, rgba(62, 138, 124, 0.06), transparent 26rem),
+    var(--color-nx-bg);
+  color: var(--color-nx-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.035em;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-nx-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-nx-border-strong);
+}
+
+/* ── Focus Styles ── */
+*:focus-visible {
+  outline: 2px solid var(--color-nx-accent);
+  outline-offset: 2px;
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--color-nx-accent);
+  color: white;
+}
+
+/* ── Skeleton Animation ── */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.skeleton-pulse {
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── AI Glow ── */
+@keyframes ai-glow {
+  0%, 100% { box-shadow: 0 0 8px 0 rgba(93, 69, 124, 0.16); }
+  50% { box-shadow: 0 0 16px 2px rgba(62, 138, 124, 0.2); }
+}
+
+.ai-glow {
+  animation: ai-glow 3s ease-in-out infinite;
+}
+
+/* ── Subtle Grid Pattern ── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(207, 196, 181, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 196, 181, 0.38) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ── Gradient Text ── */
+.text-gradient {
+  background: linear-gradient(135deg, #5D457C, #3E8A7C);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── React Flow Overrides ── */
+.react-flow__node {
+  font-family: var(--font-sans);
+}
+
+.react-flow__background {
+  background: var(--color-nx-bg) !important;
+}
+
+.react-flow__edge-path {
+  stroke: var(--color-nx-border-strong) !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__controls-button {
+  background: var(--color-nx-surface) !important;
+  border: 1px solid var(--color-nx-border) !important;
+  color: var(--color-nx-text-secondary) !important;
+  fill: var(--color-nx-text-secondary) !important;
+}
+
+.react-flow__minimap {
+  background: var(--color-nx-surface) !important;
+  border: 1px solid var(--color-nx-border) !important;
+  border-radius: 8px !important;
 }
