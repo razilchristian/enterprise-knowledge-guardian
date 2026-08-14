@@ -16,12 +16,9 @@ sources, and a two-sided model cannot represent it.
 """
 
 import json
-import time
 from dataclasses import asdict, dataclass, field
 
-import requests
-
-from app import config, retrieval
+from app import config, gemini, retrieval
 
 
 class GuardianError(RuntimeError):
@@ -58,73 +55,37 @@ class Answer:
     hits_considered: int
 
 
-def _post(model: str, prompt: str, temperature: float) -> requests.Response:
-    return requests.post(
-        f"{config.GEMINI_BASE}/models/{model}:generateContent",
-        headers={
-            "x-goog-api-key": config.GEMINI_API_KEY,
-            "Content-Type": "application/json",
-        },
-        json={
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": temperature,
-                "responseMimeType": "application/json",
-            },
-        },
-        timeout=90,
-    )
-
-
 def _call_gemini(prompt: str, *, temperature: float = 0.1) -> str:
-    """Call Gemini, retrying transient failures and falling back to a second model.
+    """Ask Gemini for the answer and the verification in one response.
 
-    The free tier returns 503 under load and 429 when quota is tight. Both are
-    temporary and both would otherwise surface as a dead demo, so we back off
-    and retry, then try the fallback model before giving up.
+    Key rotation and model fallback live in app/gemini.py; this only shapes the
+    request and pulls the text out.
     """
-    last = ""
+    try:
+        payload = gemini.call(
+            "models/{model}:generateContent",
+            {
+                "contents": [{"parts": [{"text": prompt}]}],
+                # No thinkingConfig here: gemini-flash-lite-latest rejects it
+                # with a 400, and lite is the model we most want to reach.
+                "generationConfig": {
+                    "temperature": temperature,
+                    "responseMimeType": "application/json",
+                    # Bounded so a rambling response cannot stall the UI. The
+                    # reply is structured JSON, not prose, so this is ample.
+                    "maxOutputTokens": 2048,
+                },
+            },
+            models=config.CHAT_MODELS,
+            timeout=25,
+        )
+    except gemini.GeminiError as exc:
+        raise GuardianError(str(exc)) from exc
 
-    for model in config.CHAT_MODELS:
-        for attempt in range(3):
-            response = _post(model, prompt, temperature)
-
-            if response.status_code == 200:
-                payload = response.json()
-                try:
-                    return payload["candidates"][0]["content"]["parts"][0]["text"]
-                except (KeyError, IndexError) as exc:
-                    raise GuardianError(
-                        f"Unexpected Gemini response shape: {str(payload)[:300]}"
-                    ) from exc
-
-            if response.status_code in (401, 403):
-                raise GuardianError(
-                    f"Gemini rejected the API key (HTTP {response.status_code}).\n"
-                    "  Check GEMINI_API_KEY in backend/.env, or create a new key\n"
-                    "  at https://aistudio.google.com/apikey"
-                )
-
-            last = f"{model} HTTP {response.status_code}: {response.text[:140]}"
-
-            # Quota is exhausted for hours, so retrying this model is wasted
-            # time. Move to the next one immediately.
-            if response.status_code == 429:
-                break
-
-            # Overload clears in seconds; a short backoff is worth it.
-            if response.status_code in (500, 502, 503, 504):
-                time.sleep(1.5 * (attempt + 1))
-                continue
-
-            break  # anything else is not retryable on this model
-
-    raise GuardianError(
-        f"Every model in the chain failed ({', '.join(config.CHAT_MODELS)}).\n"
-        f"  Last error: {last}\n"
-        "  A 429 means the free-tier daily quota is spent; it resets on Google's "
-        "clock, or use a different API key."
-    )
+    try:
+        return payload["candidates"][0]["content"]["parts"][0]["text"]
+    except (KeyError, IndexError) as exc:
+        raise GuardianError(f"Unexpected Gemini response shape: {str(payload)[:300]}") from exc
 
 
 def _parse_json(raw: str) -> dict:

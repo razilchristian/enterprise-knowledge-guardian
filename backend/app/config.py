@@ -50,10 +50,24 @@ ACTIVITY = "activity"
 VECTOR_INDEX = "chunk_embedding_index"
 
 # --- Gemini ---
-GEMINI_API_KEY = _required(
-    "GEMINI_API_KEY",
-    "Create one free at https://aistudio.google.com/apikey",
-)
+# Several keys, tried in rotation. One key's free-tier quota is not enough for
+# a day of rehearsal plus a live demo, and a spent key returns 429 for hours.
+def _keys() -> tuple[str, ...]:
+    raw = os.getenv("GEMINI_API_KEYS", "") or os.getenv("GEMINI_API_KEY", "")
+    keys = tuple(k.strip() for k in raw.split(",") if k.strip())
+    if not keys:
+        raise ConfigError(
+            "No Gemini API keys set.\n"
+            "  Fix: set GEMINI_API_KEYS in backend/.env to one or more keys,\n"
+            "  comma-separated. Create them free at https://aistudio.google.com/apikey"
+        )
+    return keys
+
+
+GEMINI_API_KEYS = _keys()
+
+# Kept for anything still reading a single key.
+GEMINI_API_KEY = GEMINI_API_KEYS[0]
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta"
 EMBED_MODEL = "gemini-embedding-001"
@@ -71,9 +85,16 @@ EMBED_MODEL = "gemini-embedding-001"
 # A 429 is the dangerous one for a fixed demo date: retrying the same model does
 # not help, so the chain has to move on. Aliases rather than pinned versions
 # because Google retired gemini-2.5-flash for new API keys mid-build.
+# Lite first: it is the fastest of the three and has the most generous free
+# quota, which is what keeps answers under five seconds and keeps working after
+# a day of rehearsal. The heavier models sit behind it as fallbacks.
+#
+# Measured lesson: extra API keys do NOT buy extra quota. Quota is per Google
+# account per model, so five keys from one account all hit 429 together. Model
+# choice is the lever; a second account would be the only way to add headroom.
 CHAT_MODELS = (
-    "gemini-3-flash-preview",
     "gemini-flash-lite-latest",
+    "gemini-3-flash-preview",
     "gemini-flash-latest",
 )
 
