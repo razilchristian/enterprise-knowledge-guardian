@@ -116,6 +116,16 @@ def chunk_text(text: str) -> list[Chunk]:
     return chunks
 
 
+def _title_from(stem: str) -> str:
+    """Filename stem to a human title.
+
+    Titles are displayed as citations, so `HR_Service_Standards` has to read as
+    "HR Service Standards" rather than leaking a filename convention onto the
+    screen during a demo.
+    """
+    return " ".join(stem.replace("_", " ").split())
+
+
 def extract(path: Path) -> ExtractedDoc:
     text, page_count = read_pdf(path)
     version = VERSION.search(text)
@@ -123,7 +133,7 @@ def extract(path: Path) -> ExtractedDoc:
 
     return ExtractedDoc(
         filename=path.name,
-        title=path.stem,
+        title=_title_from(path.stem),
         version=version.group(1) if version else None,
         doc_id=doc_id.group(1) if doc_id else None,
         page_count=page_count,

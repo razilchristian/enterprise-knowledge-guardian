@@ -29,6 +29,8 @@ PROBES = [
     "how quickly must a security incident be acknowledged",
     "what are the expense approval thresholds",
     "how many software licence seats are permitted",
+    "when will I receive my experience letter after leaving",
+    "who signs an experience letter",
 ]
 
 

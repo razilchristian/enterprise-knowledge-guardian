@@ -69,12 +69,58 @@ def record(conflict: guardian.Conflict, question: str) -> tuple[str, bool]:
         )
         return key, False
 
+    # Exact-match deduplication is not enough on its own. The model does not
+    # always extract the same set of sources for the same contradiction, and
+    # ingesting a new document can add a source to a contradiction already on
+    # file. Both produce a different fingerprint for what a person would call
+    # the same problem, and two near-identical rows read as double-counting.
+    #
+    # So: compare document sets. A conflict covering a superset of another's
+    # documents is the same problem seen more completely, and supersedes it.
+    incoming_docs = set(documents)
+    superseded: list[dict[str, Any]] = []
+
+    for candidate in collection.find({"documents": {"$in": documents}}):
+        candidate_docs = set(candidate.get("documents", []))
+        if not candidate_docs:
+            continue
+        if candidate_docs > incoming_docs:
+            # An existing record already covers more sources. Keep it, and
+            # record that this phrasing reached the same problem.
+            collection.update_one(
+                {"fingerprint": candidate["fingerprint"]},
+                {
+                    "$set": {"lastSeenAt": now},
+                    "$inc": {"timesSurfaced": 1},
+                    "$addToSet": {"questions": question},
+                },
+            )
+            return str(candidate["fingerprint"]), False
+        if candidate_docs < incoming_docs or candidate_docs == incoming_docs:
+            superseded.append(candidate)
+
+    # Carry the humans' work forward rather than resetting it: a conflict a
+    # person already moved to In Review must not silently reopen because a new
+    # document widened it.
+    inherited_status = OPEN
+    inherited_questions: list[str] = []
+    inherited_count = 0
+    first_seen = now
+
+    for old in superseded:
+        if old.get("status") != OPEN:
+            inherited_status = old["status"]
+        inherited_questions.extend(old.get("questions", []))
+        inherited_count += int(old.get("timesSurfaced", 0))
+        first_seen = min(first_seen, float(old.get("detectedAt", now)))
+        collection.delete_one({"fingerprint": old["fingerprint"]})
+
     collection.insert_one(
         {
             "fingerprint": key,
             "title": conflict.topic,
             "severity": conflict.severity,
-            "status": OPEN,
+            "status": inherited_status,
             "explanation": conflict.explanation,
             "recommendedAction": conflict.recommended_action,
             "claims": [asdict(c) for c in conflict.claims],
@@ -83,10 +129,11 @@ def record(conflict: guardian.Conflict, question: str) -> tuple[str, bool]:
             "documents": documents,
             "claimCount": len(conflict.claims),
             "crossDepartment": len(departments) > 1,
-            "detectedAt": now,
+            "detectedAt": first_seen,
             "lastSeenAt": now,
-            "timesSurfaced": 1,
-            "questions": [question],
+            "timesSurfaced": inherited_count + 1,
+            "questions": sorted({*inherited_questions, question}),
+            "supersededCount": len(superseded),
         }
     )
     return key, True

@@ -62,8 +62,23 @@ EMBED_MODEL = "gemini-embedding-001"
 # for new API keys mid-build; the alias tracks whatever is current, which is
 # the safer failure mode when a demo date is fixed. gemini-3-flash-preview
 # also works if the alias ever misbehaves.
-CHAT_MODEL = "gemini-flash-latest"
-CHAT_MODEL_FALLBACK = "gemini-3-flash-preview"
+# Tried in order until one answers. Three deep, not two, because the free tier
+# fails in two different ways and both were hit during development:
+#
+#   429  daily quota exhausted on that model, and it stays exhausted for hours
+#   503  the model is temporarily overloaded, clears in seconds
+#
+# A 429 is the dangerous one for a fixed demo date: retrying the same model does
+# not help, so the chain has to move on. Aliases rather than pinned versions
+# because Google retired gemini-2.5-flash for new API keys mid-build.
+CHAT_MODELS = (
+    "gemini-3-flash-preview",
+    "gemini-flash-lite-latest",
+    "gemini-flash-latest",
+)
+
+# The name shown in /api/health. The chain above is what actually runs.
+CHAT_MODEL = CHAT_MODELS[0]
 
 # gemini-embedding-001 returns 3072 dimensions by default. We request 768:
 # a quarter of the storage on a 512 MB free cluster, faster search, and ample

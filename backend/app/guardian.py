@@ -85,8 +85,8 @@ def _call_gemini(prompt: str, *, temperature: float = 0.1) -> str:
     """
     last = ""
 
-    for model in (config.CHAT_MODEL, config.CHAT_MODEL_FALLBACK):
-        for attempt in range(4):
+    for model in config.CHAT_MODELS:
+        for attempt in range(3):
             response = _post(model, prompt, temperature)
 
             if response.status_code == 200:
@@ -105,16 +105,25 @@ def _call_gemini(prompt: str, *, temperature: float = 0.1) -> str:
                     "  at https://aistudio.google.com/apikey"
                 )
 
-            last = f"{model} HTTP {response.status_code}: {response.text[:160]}"
+            last = f"{model} HTTP {response.status_code}: {response.text[:140]}"
 
-            if response.status_code in (429, 500, 502, 503, 504):
-                time.sleep(2 ** attempt)  # 1s, 2s, 4s, 8s
+            # Quota is exhausted for hours, so retrying this model is wasted
+            # time. Move to the next one immediately.
+            if response.status_code == 429:
+                break
+
+            # Overload clears in seconds; a short backoff is worth it.
+            if response.status_code in (500, 502, 503, 504):
+                time.sleep(1.5 * (attempt + 1))
                 continue
 
-            break  # non-retryable on this model; try the fallback
+            break  # anything else is not retryable on this model
 
     raise GuardianError(
-        f"Gemini unavailable after retries on both models.\n  Last error: {last}"
+        f"Every model in the chain failed ({', '.join(config.CHAT_MODELS)}).\n"
+        f"  Last error: {last}\n"
+        "  A 429 means the free-tier daily quota is spent; it resets on Google's "
+        "clock, or use a different API key."
     )
 
 

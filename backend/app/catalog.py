@@ -14,6 +14,9 @@ CATALOG: dict[str, tuple[str, str]] = {
     "Employee Onboarding Checklist": ("Human Resources", "Sarah Chen"),
     "Annual Performance Review Framework": ("Human Resources", "Sarah Chen"),
     "Code of Conduct": ("Human Resources", "Sarah Chen"),
+    # Underscored filenames, matching how these two arrived.
+    "Employee_Separation_and_Documentation_Policy": ("Human Resources", "Sarah Chen"),
+    "HR_Service_Standards": ("Human Resources", "Sarah Chen"),
 
     "Vendor Master Agreement": ("Legal", "Michael Torres"),
     "Vendor Risk Assessment Matrix": ("Legal", "Michael Torres"),
@@ -40,4 +43,18 @@ DEFAULT = ("Operations", "Unassigned")
 
 
 def lookup(stem: str) -> tuple[str, str]:
-    return CATALOG.get(stem, DEFAULT)
+    """Department and owner for a document, by filename stem.
+
+    Falls back to matching with underscores and spaces treated alike, so a file
+    named `HR_Service_Standards.pdf` still resolves if the catalog key uses
+    spaces. Silently defaulting to Operations would mis-attribute ownership,
+    which is what the approval model turns on.
+    """
+    if stem in CATALOG:
+        return CATALOG[stem]
+
+    normalized = stem.replace("_", " ").strip().lower()
+    for key, value in CATALOG.items():
+        if key.replace("_", " ").strip().lower() == normalized:
+            return value
+    return DEFAULT
