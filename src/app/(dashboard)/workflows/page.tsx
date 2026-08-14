@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { workflows } from "@/data";
 import { formatRelativeTime } from "@/lib/utils";
 import type { WorkflowStatus } from "@/types";
+import RoadmapNotice from "@/components/ui/roadmap-notice";
 
 const statusStyle: Record<WorkflowStatus, string> = {
   Active: "bg-nx-success-muted text-nx-success",
@@ -17,6 +18,8 @@ const statusStyle: Record<WorkflowStatus, string> = {
 export default function WorkflowsPage() {
   return (
     <div className="p-6 max-w-[1400px] mx-auto space-y-6">
+      <RoadmapNotice what="These workflows are designed, not yet executable: there is no workflow engine behind this screen." />
+
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Workflows</h1>

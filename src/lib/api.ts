@@ -146,16 +146,131 @@ export async function getConflict(id: string): Promise<StoredConflict> {
 
 export async function setConflictStatus(
   id: string,
-  status: ConflictStatus
+  status: ConflictStatus,
+  actor?: string
 ): Promise<void> {
   const response = await fetch(`${BASE}/api/conflicts/${id}/status`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ status }),
+    body: JSON.stringify({ status, actor }),
   }).catch(() => null);
   if (!response?.ok) {
     throw new ApiError("Could not update the status.");
   }
+}
+
+// ── Documents ──
+
+export interface DocumentRecord {
+  _id: string;
+  filename: string;
+  title: string;
+  department: string;
+  owner: string;
+  version: string | null;
+  docId: string | null;
+  pageCount: number;
+  charCount: number;
+  chunkCount: number;
+  ingestedAt: number;
+}
+
+export interface DocumentSection {
+  section: string;
+  text: string;
+  chunkIndex: number;
+}
+
+export async function listDocuments(): Promise<{
+  documents: DocumentRecord[];
+  total: number;
+  openToEveryone: boolean;
+}> {
+  return get("/api/documents");
+}
+
+export async function getDocument(id: string): Promise<{
+  document: DocumentRecord;
+  sections: DocumentSection[];
+}> {
+  return get(`/api/documents/${id}`);
+}
+
+// ── Stats, activity, graph ──
+
+export interface KnowledgeHealth {
+  department: string;
+  documents: number;
+  inConflict: number;
+  health: number;
+}
+
+export interface Stats {
+  documents: number;
+  chunks: number;
+  departments: number;
+  documentsByDepartment: Record<string, number>;
+  conflicts: ConflictSummary;
+  activityEvents: number;
+  knowledgeHealth: KnowledgeHealth[];
+}
+
+export async function getStats(): Promise<Stats> {
+  return get("/api/stats");
+}
+
+export interface ActivityEventRecord {
+  who: string;
+  isAI: boolean;
+  action: string;
+  resource: string;
+  result: string;
+  details: string | null;
+  timestamp: number;
+}
+
+export async function listActivity(limit = 60): Promise<{ events: ActivityEventRecord[] }> {
+  return get(`/api/activity?limit=${limit}`);
+}
+
+export interface GraphNode {
+  id: string;
+  label: string;
+  type: "department" | "document";
+  department?: string;
+  owner?: string;
+  health: "healthy" | "conflicting";
+  connections: number;
+}
+
+export interface GraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  label: string;
+  kind: "ownership" | "conflict";
+  severity?: string;
+  conflictId?: string;
+}
+
+export async function getKnowledgeGraph(): Promise<{
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  conflictEdges: number;
+}> {
+  return get("/api/knowledge-graph");
+}
+
+/** Shared GET with the same error handling as the rest of this module. */
+async function get<T>(path: string): Promise<T> {
+  const response = await fetch(`${BASE}${path}`).catch(() => null);
+  if (!response) {
+    throw new ApiError(`Cannot reach the Guardian backend at ${BASE}.`);
+  }
+  if (!response.ok) {
+    throw new ApiError(`Request failed (HTTP ${response.status})`, response.status);
+  }
+  return response.json();
 }
 
 export interface HealthResponse {

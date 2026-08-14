@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { integrations } from "@/data";
 import { formatRelativeTime } from "@/lib/utils";
+import RoadmapNotice from "@/components/ui/roadmap-notice";
 
 const iconMap: Record<string, React.ReactNode> = {
   "hard-drive": <HardDrive size={24} />,
@@ -32,6 +33,8 @@ export default function IntegrationsPage() {
 
   return (
     <div className="p-6 max-w-[1400px] mx-auto space-y-6">
+      <RoadmapNotice what="No connector is live yet; documents are ingested from a local folder." />
+
       <div>
         <h1 className="text-xl font-semibold tracking-tight">Integrations</h1>
         <p className="text-sm text-nx-text-muted mt-0.5">Connect your enterprise tools to NEXORA</p>

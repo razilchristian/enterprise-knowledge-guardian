@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { agents } from "@/data";
 import RelativeTime from "@/components/ui/relative-time";
 import type { AgentStatus } from "@/types";
+import RoadmapNotice from "@/components/ui/roadmap-notice";
 
 const iconMap: Record<string, React.ReactNode> = {
   "file-search": <FileSearch size={20} />,
@@ -33,6 +34,8 @@ const statusStyle: Record<AgentStatus, string> = {
 export default function AgentsPage() {
   return (
     <div className="p-6 max-w-[1400px] mx-auto space-y-6">
+      <RoadmapNotice what="These agents are designed, not yet running: there is no agent scheduler behind this screen." />
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

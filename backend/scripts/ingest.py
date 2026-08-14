@@ -15,7 +15,7 @@ from pathlib import Path
 
 from pymongo import ASCENDING
 
-from app import catalog, config, db, embeddings, extract
+from app import activity, catalog, config, db, embeddings, extract
 
 
 def ingest_file(path: Path) -> tuple[int, int]:
@@ -71,6 +71,12 @@ def ingest_file(path: Path) -> tuple[int, int]:
     if batch:
         chunks.insert_many(batch)
 
+    activity.log(
+        "Uploaded",
+        doc.title,
+        actor=owner,
+        details=f"{doc.page_count} pages, {stored} sections indexed · {department}",
+    )
     return stored, failed
 
 

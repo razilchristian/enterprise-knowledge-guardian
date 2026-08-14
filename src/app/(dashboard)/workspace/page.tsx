@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   AlertTriangle, ArrowUpRight, Bot, BookOpen, CheckCircle2, ChevronRight,
   FileText, History, Loader2, Paperclip, Plus, Send, Globe, Sparkles, User,
@@ -23,7 +24,18 @@ interface Turn {
   error?: string;
 }
 
+// useSearchParams needs a Suspense boundary so the route can still prerender.
+// See next/docs 01-app/03-api-reference/04-functions/use-search-params.
 export default function WorkspacePage() {
+  return (
+    <Suspense fallback={<div className="min-h-[calc(100vh-64px)] bg-nx-bg" />}>
+      <Workspace />
+    </Suspense>
+  );
+}
+
+function Workspace() {
+  const searchParams = useSearchParams();
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
   const [pending, setPending] = useState(false);
@@ -44,8 +56,15 @@ export default function WorkspacePage() {
   const latest = turns[turns.length - 1];
   const citations = latest?.result?.citations ?? [];
 
-  const submit = async (question: string) => {
-    if (!question.trim() || pending) return;
+  // Stable identity so the ?q= effect below can depend on it honestly rather
+  // than suppressing the lint rule. The in-flight guard is a ref written only
+  // inside this handler — `pending` state drives the UI, this stops a second
+  // request racing the first.
+  const inFlight = useRef(false);
+
+  const submit = useCallback(async (question: string) => {
+    if (!question.trim() || inFlight.current) return;
+    inFlight.current = true;
     setInput("");
     setPending(true);
     setActiveSource(0);
@@ -60,9 +79,19 @@ export default function WorkspacePage() {
       setTurns((prev) => prev.map((t, i) => (i === prev.length - 1 ? { ...t, error: message } : t)));
       if (err instanceof ApiError && !err.status) setBackendUp(false);
     } finally {
+      inFlight.current = false;
       setPending(false);
     }
-  };
+  }, []);
+
+  // A question arriving from the dashboard as ?q=... is asked once on arrival.
+  const incoming = searchParams.get("q");
+  const asked = useRef(false);
+  useEffect(() => {
+    if (!incoming || asked.current) return;
+    asked.current = true;
+    void submit(incoming);
+  }, [incoming, submit]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
