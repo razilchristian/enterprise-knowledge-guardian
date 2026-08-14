@@ -292,3 +292,80 @@ export async function health(): Promise<HealthResponse> {
     return { ok: false };
   }
 }
+
+// ── Agents & Workflows ──
+
+export interface AgentRecord {
+  id: string;
+  name: string;
+  description: string;
+  owner: string;
+  runs: number;
+  successRate: number;
+  lastRun: string;
+  status: "Active" | "Idle" | "Running" | "Error" | "Paused";
+  icon: string;
+  department: string;
+  avgDuration: string;
+  documentsProcessed: number;
+}
+
+export interface RunAgentResult {
+  ok: boolean;
+  agent_id: string;
+  agent_name: string;
+  department: string;
+  documents_scanned: number;
+  scanned_titles: string[];
+  chunks_analyzed: number;
+  status: string;
+  duration: string;
+  summary: string;
+  executed_at: string;
+}
+
+export async function listAgents(): Promise<{ agents: AgentRecord[] }> {
+  return get("/api/agents");
+}
+
+export async function runAgent(agentId: string, actor?: string): Promise<RunAgentResult> {
+  const response = await fetch(`${BASE}/api/agents/${agentId}/run`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ actor }),
+  }).catch(() => null);
+  if (!response?.ok) {
+    throw new ApiError("Failed to execute agent.");
+  }
+  return response.json();
+}
+
+export interface WorkflowRecord {
+  id: string;
+  name: string;
+  description: string;
+  status: string;
+  runs: number;
+  lastRun: string;
+  owner: string;
+  department: string;
+  nodes: number;
+  successRate: number;
+}
+
+export async function listWorkflows(): Promise<{ workflows: WorkflowRecord[] }> {
+  return get("/api/workflows");
+}
+
+export async function runWorkflow(workflowId: string, actor?: string): Promise<any> {
+  const response = await fetch(`${BASE}/api/workflows/${workflowId}/run`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ actor }),
+  }).catch(() => null);
+  if (!response?.ok) {
+    throw new ApiError("Failed to execute workflow.");
+  }
+  return response.json();
+}
+

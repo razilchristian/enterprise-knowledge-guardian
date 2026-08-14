@@ -20,7 +20,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from app import activity, conflicts, config, db, gemini, guardian
+from app import activity, agents, conflicts, config, db, gemini, guardian
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -377,3 +377,35 @@ def update_conflict_status(conflict_id: str, request: StatusRequest) -> dict[str
         details=f"Status set to {request.status}",
     )
     return {"conflict_id": conflict_id, "status": request.status}
+
+
+class RunRequest(BaseModel):
+    actor: str | None = None
+
+
+@app.get("/api/agents")
+def list_agents_route() -> dict[str, Any]:
+    """List all AI agents and their execution stats from MongoDB."""
+    return {"agents": agents.list_agents()}
+
+
+@app.post("/api/agents/{agent_id}/run")
+def run_agent_route(agent_id: str, request: RunRequest | None = None) -> dict[str, Any]:
+    """Execute a real AI agent pass over the enterprise corpus."""
+    actor = request.actor if request and request.actor else "Sarah Chen"
+    result = agents.run_agent(agent_id, actor=actor)
+    return result
+
+
+@app.get("/api/workflows")
+def list_workflows_route() -> dict[str, Any]:
+    """List all pipeline workflows from MongoDB."""
+    return {"workflows": agents.list_workflows()}
+
+
+@app.post("/api/workflows/{workflow_id}/run")
+def run_workflow_route(workflow_id: str, request: RunRequest | None = None) -> dict[str, Any]:
+    """Execute a pipeline workflow pass."""
+    actor = request.actor if request and request.actor else "Alex Morgan"
+    result = agents.run_workflow(workflow_id, actor=actor)
+    return result
