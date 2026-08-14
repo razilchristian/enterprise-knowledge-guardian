@@ -82,6 +82,82 @@ export async function ask(question: string): Promise<AskResponse> {
   return response.json();
 }
 
+export type ConflictStatus = "Open" | "In Review" | "Resolved" | "Dismissed";
+
+/** A conflict as stored, after being detected while answering some question. */
+export interface StoredConflict {
+  /** Stable id derived from the documents and sections involved. */
+  fingerprint: string;
+  title: string;
+  severity: "High" | "Medium" | "Low";
+  status: ConflictStatus;
+  explanation: string;
+  recommendedAction: string;
+  claims: ConflictClaim[];
+  departments: string[];
+  owners: string[];
+  documents: string[];
+  claimCount: number;
+  /** True when the disagreeing documents belong to different departments. */
+  crossDepartment: boolean;
+  detectedAt: number;
+  lastSeenAt: number;
+  /** How many distinct questions surfaced this same contradiction. */
+  timesSurfaced: number;
+  questions: string[];
+}
+
+export interface ConflictSummary {
+  total: number;
+  active: number;
+  high: number;
+  medium: number;
+  low: number;
+  crossDepartment: number;
+}
+
+export async function listConflicts(): Promise<{
+  conflicts: StoredConflict[];
+  summary: ConflictSummary;
+}> {
+  const response = await fetch(`${BASE}/api/conflicts`).catch(() => null);
+  if (!response) {
+    throw new ApiError(`Cannot reach the Guardian backend at ${BASE}.`);
+  }
+  if (!response.ok) {
+    throw new ApiError(`Could not load conflicts (HTTP ${response.status})`, response.status);
+  }
+  return response.json();
+}
+
+export async function getConflict(id: string): Promise<StoredConflict> {
+  const response = await fetch(`${BASE}/api/conflicts/${id}`).catch(() => null);
+  if (!response) {
+    throw new ApiError(`Cannot reach the Guardian backend at ${BASE}.`);
+  }
+  if (response.status === 404) {
+    throw new ApiError("That conflict no longer exists.", 404);
+  }
+  if (!response.ok) {
+    throw new ApiError(`Could not load the conflict (HTTP ${response.status})`, response.status);
+  }
+  return response.json();
+}
+
+export async function setConflictStatus(
+  id: string,
+  status: ConflictStatus
+): Promise<void> {
+  const response = await fetch(`${BASE}/api/conflicts/${id}/status`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  }).catch(() => null);
+  if (!response?.ok) {
+    throw new ApiError("Could not update the status.");
+  }
+}
+
 export interface HealthResponse {
   ok: boolean;
   mongodb?: string;

@@ -19,7 +19,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from app import config, db, guardian
+from app import conflicts, config, db, guardian
 
 app = FastAPI(
     title="Nexora Guardian API",
@@ -118,7 +118,20 @@ def ask(request: AskRequest) -> dict[str, Any]:
         # The model provider being down is a 503, not a bug in this service.
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
-    return guardian.to_dict(answer)
+    payload = guardian.to_dict(answer)
+
+    # A contradiction found here is a real problem in the customer's documents,
+    # so it outlives the question that surfaced it. Persisting failures must not
+    # break the answer -- the user asked a question, not to file a ticket.
+    if answer.has_conflict and answer.conflict:
+        try:
+            key, is_new = conflicts.record(answer.conflict, request.question)
+            payload["conflict_id"] = key
+            payload["conflict_is_new"] = is_new
+        except Exception:  # noqa: BLE001
+            payload["conflict_id"] = None
+
+    return payload
 
 
 @app.get("/api/documents")
@@ -160,10 +173,30 @@ def get_document(document_id: str) -> dict[str, Any]:
 
 @app.get("/api/conflicts")
 def list_conflicts(status: str | None = None) -> dict[str, Any]:
-    """Persisted conflicts. Empty until detections are written to MongoDB."""
-    query = {"status": status} if status else {}
-    conflicts = [
-        _clean(c)
-        for c in db.collection(config.CONFLICTS).find(query).sort("detectedAt", -1)
-    ]
-    return {"conflicts": conflicts, "total": len(conflicts)}
+    """Every contradiction found so far, newest severity first."""
+    return {"conflicts": conflicts.listing(status), "summary": conflicts.summary()}
+
+
+@app.get("/api/conflicts/{conflict_id}")
+def get_conflict(conflict_id: str) -> dict[str, Any]:
+    found = conflicts.get(conflict_id)
+    if not found:
+        raise HTTPException(status_code=404, detail="No conflict with that id")
+    return found
+
+
+class StatusRequest(BaseModel):
+    status: str
+
+
+@app.post("/api/conflicts/{conflict_id}/status")
+def update_conflict_status(conflict_id: str, request: StatusRequest) -> dict[str, Any]:
+    """Move a conflict through review. This is the human half of the governance
+    model -- the AI detects and recommends, a person decides."""
+    try:
+        changed = conflicts.set_status(conflict_id, request.status)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if not changed:
+        raise HTTPException(status_code=404, detail="No conflict with that id")
+    return {"conflict_id": conflict_id, "status": request.status}

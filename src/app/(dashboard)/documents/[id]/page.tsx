@@ -60,7 +60,9 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
           <button className="flex items-center gap-2 px-3 py-2 rounded-lg border border-nx-border text-sm text-nx-text-secondary hover:bg-nx-elevated transition-colors">
             <Brain size={14} /> Summarize
           </button>
-          <Link href="/conflicts/con-1" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-sm font-semibold transition-colors">
+          {/* The conflicts list, not a fixed id: real conflicts are keyed by
+              fingerprint and only exist once detection has run. */}
+          <Link href="/conflicts" className="flex items-center gap-2 px-3 py-2 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-sm font-semibold transition-colors">
             <AlertTriangle size={14} /> Detect Conflicts
           </Link>
         </div>
