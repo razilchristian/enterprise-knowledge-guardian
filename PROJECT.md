@@ -237,9 +237,13 @@ embed better, and the heading becomes the citation string the UI displays.
 - **Content bug:** the Employee Handbook PDF has a stray editorial parenthetical
   baked into a real heading — "§7.3 — Paid Time Off (same section, separate
   paragraph)". Cosmetic, but visible in citations.
-- **Weak DB password** (`Owap0tU1yPA8bLxk`) combined with Network Access `0.0.0.0/0`.
-  Fake data, so low stakes, but the practical risk is someone wiping the cluster
-  before the demo.
+- **Weak DB password** combined with Network Access `0.0.0.0/0`. Fake data, so low
+  stakes, but the practical risk is someone wiping the cluster before the demo.
+  Never write a credential into a tracked file — an earlier revision of this line
+  contained the literal password and pushed it to GitHub.
+- **The Atlas database user holds `atlasAdmin` on `admin`**, not a role scoped to
+  the `nexora` database. Broader than it needs to be; a real deployment would use
+  `readWrite` on `nexora` only.
 - **Gemini API key is exposed** in a chat transcript. Rotate after the expo.
 - **Pre-existing lint error** in `src/components/ui/command-palette.tsx:82`
   (setState in effect). Harmless, predates this work.

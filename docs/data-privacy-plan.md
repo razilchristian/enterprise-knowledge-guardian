@@ -80,21 +80,29 @@ prioritizes your department), but never what is visible.
 
 ## 3. Tenant Isolation
 
-Each customer organization is a separate tenant with complete data isolation:
+> **Status: designed, not yet implemented.** The current build is single-tenant —
+> one database, one vector index, one API key, and no tenant identifier anywhere
+> in the code. Multi-tenancy is the first architectural change required before a
+> pilot with real customers. It is described here as the design commitment, not
+> as a shipped capability.
 
-| Layer | Isolation mechanism |
-|-------|-------------------|
+The intended model gives each customer organization complete isolation:
+
+| Layer | Planned isolation mechanism |
+|-------|----------------------------|
 | **Database** | Separate MongoDB database per tenant (no shared collections) |
-| **Vector index** | Per-tenant vector search index (queries never cross tenants) |
-| **API keys** | Per-tenant Gemini API key (usage tracking and billing isolation) |
-| **Application** | Tenant ID scoped at the API layer; no request can access another tenant's data |
+| **Vector index** | Per-tenant vector search index, so queries cannot cross tenants |
+| **API keys** | Per-tenant provider key for usage tracking and billing isolation |
+| **Application** | Tenant ID scoped at the API layer and enforced on every query |
 
-**Within a tenant, read is open.** This is the explicit design: one company's
-policies are visible to everyone in that company, because that is what makes
-conflict detection work.
+**Within a tenant, read is open.** This part *is* implemented and is the explicit
+design: one company's policies are visible to everyone in that company, because
+that is what makes conflict detection work.
 
-**Between tenants, isolation is absolute.** Company A's documents are invisible
-to Company B at every layer — database, vector search, and API.
+**Between tenants, isolation must be absolute.** Company A's documents must be
+invisible to Company B at every layer. Because that boundary does not exist in
+code today, the current deployment holds only synthetic data for a single
+fictional organization.
 
 ---
 
@@ -127,10 +135,18 @@ only policy documents (not personal data) are processed.
 
 ### 5.3 Right to Erasure
 
-If a document is removed from the corpus:
-1. Re-run the ingestion pipeline without that document.
-2. The corresponding chunks and embeddings are removed from MongoDB.
-3. The vector index automatically reflects the change.
+> **Status: partially implemented.** Re-ingesting a document replaces its chunks
+> cleanly. Removing a document from the corpus folder and re-running does **not**
+> erase it — the ingestion loop only touches files it finds, so a deleted
+> document's chunks and embeddings are orphaned in MongoDB indefinitely. A
+> `delete_document` path is required before any erasure request could be honoured.
+
+Once implemented, erasure works as follows:
+1. Delete the document record and every chunk carrying its `documentId`.
+2. The vector index reflects the removal automatically, since it indexes those
+   chunks.
+3. Because embeddings live on the chunk records, removing the chunks removes the
+   derived vectors in the same operation.
 
 ### 5.4 Data Retention
 
@@ -151,7 +167,12 @@ retention policies contradict each other — this is a compliance feature.
 
 ## 6. Audit Trail
 
-Every action in NEXORA is logged:
+> **Status: schema defined, capture not yet implemented.** An `activity`
+> collection exists in MongoDB and the event shape below is settled, but nothing
+> writes to it yet — the collection is empty. Wiring capture into the ask and
+> approve paths is required before any compliance claim can be made.
+
+The events to be recorded:
 
 | Event | What is recorded |
 |-------|-----------------|
@@ -161,8 +182,9 @@ Every action in NEXORA is logged:
 | Document ingested | Timestamp, document name, chunk count, department, owner |
 | Policy approved | Timestamp, approver identity, document, change description |
 
-The audit trail supports compliance requirements for SOC 2, ISO 27001, and GDPR
-accountability obligations.
+Once capture is implemented, this trail is what supports SOC 2, ISO 27001, and
+GDPR accountability obligations. Until then, the obligation is unmet and we say
+so rather than claiming otherwise.
 
 ---
 

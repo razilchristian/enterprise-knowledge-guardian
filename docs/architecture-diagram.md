@@ -25,8 +25,8 @@ graph TB
         subgraph GUARDIAN["🧠 Guardian Module"]
             EMBED_Q["Embed question\n(task_type: RETRIEVAL_QUERY)"]
             VSEARCH["Atlas $vectorSearch\n(chunk_embedding_index, k=8)"]
-            ANSWER["Generate answer\nwith citations"]
-            CONFLICT["Conflict check\n(extra LLM call)"]
+            ANSWER["Generate answer + conflict check\n(one call, one JSON response)"]
+            CONFLICT["Parse result\n(answer, citations, claims[])"]
         end
 
         subgraph INGEST["📥 Ingestion Pipeline (one-time setup)"]
@@ -53,10 +53,9 @@ graph TB
     GEMINI -->|"query embedding"| VSEARCH
     VSEARCH -->|"$vectorSearch"| MONGO
     MONGO -->|"top 8 chunks"| ANSWER
-    ANSWER -->|"chunks + prompt"| GEMINI
-    GEMINI -->|"cited answer"| CONFLICT
-    CONFLICT -->|"conflict prompt"| GEMINI
-    CONFLICT -->|"result JSON"| ASK
+    ANSWER -->|"chunks + verification prompt"| GEMINI
+    GEMINI -->|"answer + claims[] as JSON"| CONFLICT
+    CONFLICT -->|"result"| ASK
 
     %% Ingestion flow
     EXTRACT -->|"raw text"| CHUNK

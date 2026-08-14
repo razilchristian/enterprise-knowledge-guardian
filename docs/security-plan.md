@@ -64,8 +64,10 @@ narrowed to the deployed domain.
 
 ### 1.4 Database Security
 
-- **Atlas M0 cluster** with a dedicated database user scoped to the `nexora`
-  database.
+- **Atlas M0 cluster** with a single dedicated database user. That user currently
+  holds `atlasAdmin` on `admin` — broader than the application needs, and listed
+  as a known gap in §2. A production deployment would grant `readWrite` on the
+  `nexora` database only.
 - **Connection via SRV URI** over TLS (Atlas enforces TLS; unencrypted
   connections are rejected).
 - **Data at rest** is encrypted by Atlas using AES-256 (enabled by default on
@@ -82,7 +84,8 @@ for production with real enterprise documents."
 |-----|-----------|--------|
 | Atlas Network Access set to `0.0.0.0/0` (open to all IPs) | Medium | Acceptable for demo; must be IP-restricted in production |
 | Gemini API key was exposed in a chat transcript during development | Low | Key will be rotated immediately after the expo |
-| Database password is weak (`Owap0tU1yPA8bLxk`) | Low | Fake data only; rotate for any real deployment |
+| Database password is weak | Low | Fake data only; rotated after exposure, and again before any real deployment |
+| The Atlas user holds `atlasAdmin` on `admin` rather than a role scoped to one database | Medium | Over-privileged. Production would grant `readWrite` on `nexora` only |
 | No rate limiting on the FastAPI endpoints | Low | Demo scale; add middleware for production |
 | No authentication on API endpoints | By design | Open-knowledge model means no read-side access control (see §3) |
 
