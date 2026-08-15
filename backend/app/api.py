@@ -16,11 +16,15 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from bson import ObjectId
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from app import activity, agents, conflicts, config, db, gemini, guardian
+from scripts.ingest import ingest_file
+import tempfile
+import pathlib
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -206,6 +210,48 @@ def get_document(document_id: str) -> dict[str, Any]:
         .sort("chunkIndex", 1)
     ]
     return {"document": _clean(document), "sections": sections}
+
+
+@app.post("/api/documents/upload")
+async def upload_document(
+    file: UploadFile = File(...),
+    department: str = Form("Human Resources"),
+    owner: str = Form("Dev Anand"),
+) -> dict[str, Any]:
+    """Upload and ingest a new PDF document into MongoDB Atlas."""
+    if not file.filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are supported")
+
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        tmp_path = pathlib.Path(tmp_dir) / file.filename
+        content = await file.read()
+        tmp_path.write_bytes(content)
+
+        stored, failed = ingest_file(tmp_path)
+
+        # Update department and owner if custom specified
+        db.collection(config.DOCUMENTS).update_one(
+            {"filename": file.filename},
+            {"$set": {"department": department, "owner": owner}},
+        )
+
+        doc = db.collection(config.DOCUMENTS).find_one({"filename": file.filename})
+        clean_doc = _clean(doc) if doc else {}
+
+        activity.log(
+            action="Uploaded Document",
+            resource=clean_doc.get("title", file.filename),
+            actor=owner,
+            details=f"Ingested {stored} chunks into {department} collection.",
+        )
+
+        return {
+            "ok": True,
+            "filename": file.filename,
+            "chunks_stored": stored,
+            "document": clean_doc,
+        }
+
 
 
 @app.get("/api/stats")

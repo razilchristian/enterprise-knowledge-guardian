@@ -196,6 +196,28 @@ export async function getDocument(id: string): Promise<{
   return get(`/api/documents/${id}`);
 }
 
+export async function uploadDocument(
+  file: File,
+  department: string,
+  owner?: string
+): Promise<{ ok: boolean; filename: string; chunks_stored: number; document: DocumentRecord }> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("department", department);
+  if (owner) formData.append("owner", owner);
+
+  const response = await fetch(`${BASE}/api/documents/upload`, {
+    method: "POST",
+    body: formData,
+  }).catch(() => null);
+
+  if (!response?.ok) {
+    throw new ApiError("Failed to upload and ingest document.");
+  }
+  return response.json();
+}
+
+
 // ── Stats, activity, graph ──
 
 export interface KnowledgeHealth {
