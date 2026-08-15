@@ -144,6 +144,57 @@ def list_agents() -> list[dict[str, Any]]:
     return agents
 
 
+def create_agent(
+    name: str,
+    description: str,
+    department: str,
+    owner: str = "Dev Anand",
+) -> dict[str, Any]:
+    """Create and persist a new custom AI agent in MongoDB."""
+    seed_if_needed()
+    col = db.collection(AGENTS_COLLECTION)
+
+    agent_count = col.count_documents({})
+    new_id = f"agent-{agent_count + 1}"
+    now_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+    icon_by_dept = {
+        "Human Resources": "users",
+        "Legal": "file-search",
+        "Security": "lock",
+        "Engineering": "code",
+        "Operations": "activity",
+        "Finance": "file-text",
+    }
+
+    new_agent = {
+        "id": new_id,
+        "name": name,
+        "description": description,
+        "owner": owner,
+        "runs": 0,
+        "successRate": 100.0,
+        "lastRun": now_iso,
+        "status": "Active",
+        "icon": icon_by_dept.get(department, "bot"),
+        "department": department,
+        "avgDuration": "2m 30s",
+        "documentsProcessed": 0,
+    }
+
+    col.insert_one(new_agent)
+
+    activity.log(
+        action="Created Agent",
+        resource=f"{name} ({department})",
+        actor=owner,
+        details=f"Deployed new custom AI worker for {department} policy monitoring.",
+    )
+
+    clean_agent = {k: v for k, v in new_agent.items() if k != "_id"}
+    return clean_agent
+
+
 def run_agent(agent_id: str, actor: str = "Sarah Chen") -> dict[str, Any]:
     """Execute an agent pass over real MongoDB documents."""
     seed_if_needed()

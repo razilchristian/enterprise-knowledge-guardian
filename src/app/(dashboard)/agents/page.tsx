@@ -3,14 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  Bot, Play, Copy, Activity, ChevronRight, Plus,
+  Bot, Play, Copy, Activity, ChevronRight, Plus, X,
   FileSearch, ShieldCheck, Lock, Code, Users, AlertTriangle,
-  FileText, BarChart3, Loader2, CheckCircle2
+  FileText, BarChart3, Loader2, CheckCircle2, Sparkles
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RelativeTime from "@/components/ui/relative-time";
 import { useApi } from "@/lib/use-api";
-import { listAgents, runAgent, type AgentRecord, type RunAgentResult } from "@/lib/api";
+import { listAgents, runAgent, createAgent, type AgentRecord, type RunAgentResult } from "@/lib/api";
 import { Loading, ApiFailure } from "@/components/ui/api-state";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -36,6 +36,13 @@ export default function AgentsPage() {
   const { data, loading, error, reload } = useApi(listAgents);
   const [runningAgentId, setRunningAgentId] = useState<string | null>(null);
   const [lastResult, setLastResult] = useState<RunAgentResult | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [creating, setCreating] = useState(false);
+
+  // Form State
+  const [agentName, setAgentName] = useState("");
+  const [agentDept, setAgentDept] = useState("Human Resources");
+  const [agentDesc, setAgentDesc] = useState("");
 
   const handleRunAgent = async (agentId: string) => {
     setRunningAgentId(agentId);
@@ -48,6 +55,24 @@ export default function AgentsPage() {
       console.error(err);
     } finally {
       setRunningAgentId(null);
+    }
+  };
+
+  const handleCreateAgent = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!agentName.trim() || !agentDesc.trim()) return;
+
+    setCreating(true);
+    try {
+      await createAgent(agentName.trim(), agentDesc.trim(), agentDept, "Dev Anand");
+      setAgentName("");
+      setAgentDesc("");
+      setShowCreateModal(false);
+      await reload();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -71,7 +96,10 @@ export default function AgentsPage() {
             Autonomous enterprise AI workers executing real-time document audits over MongoDB Atlas
           </p>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-sm font-medium transition-colors">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-sm font-medium transition-colors shadow-lg shadow-nx-accent/20"
+        >
           <Plus size={16} /> Create Agent
         </button>
       </div>
@@ -102,6 +130,92 @@ export default function AgentsPage() {
             >
               Dismiss
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Create Agent Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-nx-surface border border-nx-border rounded-2xl w-full max-w-lg p-6 shadow-2xl space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between border-b border-nx-border pb-4">
+              <div className="flex items-center gap-2">
+                <Sparkles size={18} className="text-nx-accent" />
+                <h2 className="text-lg font-semibold text-nx-text-primary">Deploy Custom AI Agent</h2>
+              </div>
+              <button
+                onClick={() => setShowCreateModal(false)}
+                className="text-nx-text-muted hover:text-nx-text-primary transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateAgent} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-nx-text-muted uppercase tracking-wider mb-1.5">
+                  Agent Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. GDPR Retention Inspector"
+                  value={agentName}
+                  onChange={(e) => setAgentName(e.target.value)}
+                  className="w-full bg-nx-bg border border-nx-border rounded-xl px-3.5 py-2.5 text-sm text-nx-text-primary outline-none focus:border-nx-accent transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-nx-text-muted uppercase tracking-wider mb-1.5">
+                  Target Department
+                </label>
+                <select
+                  value={agentDept}
+                  onChange={(e) => setAgentDept(e.target.value)}
+                  className="w-full bg-nx-bg border border-nx-border rounded-xl px-3.5 py-2.5 text-sm text-nx-text-primary outline-none focus:border-nx-accent transition-colors"
+                >
+                  <option value="Human Resources">Human Resources</option>
+                  <option value="Legal">Legal</option>
+                  <option value="Security">Security</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Operations">Operations</option>
+                  <option value="Finance">Finance</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-nx-text-muted uppercase tracking-wider mb-1.5">
+                  Agent Mission & Audit Scope
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  placeholder="Describe what policies this agent should audit and flag..."
+                  value={agentDesc}
+                  onChange={(e) => setAgentDesc(e.target.value)}
+                  className="w-full bg-nx-bg border border-nx-border rounded-xl p-3.5 text-sm text-nx-text-primary outline-none focus:border-nx-accent transition-colors resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-nx-border">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateModal(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-medium text-nx-text-muted hover:text-nx-text-primary transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creating}
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-nx-accent hover:bg-nx-accent-hover text-white text-xs font-semibold transition-colors disabled:opacity-50"
+                >
+                  {creating ? <Loader2 size={14} className="animate-spin" /> : <Bot size={14} />}
+                  Deploy Agent
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

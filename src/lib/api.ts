@@ -328,6 +328,24 @@ export async function listAgents(): Promise<{ agents: AgentRecord[] }> {
   return get("/api/agents");
 }
 
+export async function createAgent(
+  name: string,
+  description: string,
+  department: string,
+  owner?: string
+): Promise<{ agent: AgentRecord }> {
+  const response = await fetch(`${BASE}/api/agents`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, description, department, owner }),
+  }).catch(() => null);
+  if (!response?.ok) {
+    throw new ApiError("Failed to deploy custom AI agent.");
+  }
+  return response.json();
+}
+
+
 export async function runAgent(agentId: string, actor?: string): Promise<RunAgentResult> {
   const response = await fetch(`${BASE}/api/agents/${agentId}/run`, {
     method: "POST",

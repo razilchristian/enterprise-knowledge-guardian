@@ -383,10 +383,30 @@ class RunRequest(BaseModel):
     actor: str | None = None
 
 
+class CreateAgentRequest(BaseModel):
+    name: str = Field(..., min_length=2, max_length=100)
+    description: str = Field(..., min_length=5, max_length=300)
+    department: str = Field(..., min_length=2, max_length=50)
+    owner: str | None = "Dev Anand"
+
+
 @app.get("/api/agents")
 def list_agents_route() -> dict[str, Any]:
     """List all AI agents and their execution stats from MongoDB."""
     return {"agents": agents.list_agents()}
+
+
+@app.post("/api/agents")
+def create_agent_route(request: CreateAgentRequest) -> dict[str, Any]:
+    """Deploy a new custom AI agent to MongoDB."""
+    new_agent = agents.create_agent(
+        name=request.name,
+        description=request.description,
+        department=request.department,
+        owner=request.owner or "Dev Anand",
+    )
+    return {"agent": new_agent}
+
 
 
 @app.post("/api/agents/{agent_id}/run")
