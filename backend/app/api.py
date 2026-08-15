@@ -147,7 +147,7 @@ def ask(request: AskRequest) -> dict[str, Any]:
     # A contradiction found here is a real problem in the customer's documents,
     # so it outlives the question that surfaced it. Persisting failures must not
     # break the answer -- the user asked a question, not to file a ticket.
-    if answer.has_conflict and answer.conflict:
+    if answer.conflict:
         try:
             key, is_new = conflicts.record(answer.conflict, request.question)
             payload["conflict_id"] = key
@@ -171,6 +171,9 @@ def ask(request: AskRequest) -> dict[str, Any]:
             is_ai=True,
             details=f"{answer.hits_considered} passages, sources agreed",
         )
+
+    if answer.conflict and answer.conflict.severity == "Superseded":
+        payload["has_conflict"] = False
 
     return payload
 

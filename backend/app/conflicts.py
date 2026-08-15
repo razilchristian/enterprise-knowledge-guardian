@@ -123,6 +123,7 @@ def record(conflict: guardian.Conflict, question: str) -> tuple[str, bool]:
             "status": inherited_status,
             "explanation": conflict.explanation,
             "recommendedAction": conflict.recommended_action,
+            "supersededBy": getattr(conflict, "superseded_by", None),
             "claims": [asdict(c) for c in conflict.claims],
             "departments": departments,
             "owners": owners,

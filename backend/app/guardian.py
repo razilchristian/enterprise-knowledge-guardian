@@ -39,9 +39,10 @@ class Claim:
 @dataclass
 class Conflict:
     topic: str
-    severity: str                      # High | Medium | Low
+    severity: str                      # High | Medium | Low | Superseded
     explanation: str
     recommended_action: str
+    superseded_by: str | None = None
     claims: list[Claim] = field(default_factory=list)
 
 
@@ -131,13 +132,14 @@ JOB 2 - Check whether the sources contradict each other ON THE POINT THE
 QUESTION ASKED, and report it if they do.
 
 CRITICAL RULE FOR SUPERSEDED & UNIFIED POLICIES:
-If one of the retrieved sources is a newer Master/Unified Policy (e.g. "HR Leave Policy 2026 Unified" or a document stating "explicitly supersedes all legacy documentation"), then that Unified Policy IS the authoritative corporate answer. In this case:
-- Set `has_conflict` to `false`.
-- In `answer`, state the definitive rule from the 2026 Unified Policy clearly (e.g., "Employees are entitled to 12 paid casual leave days under the 2026 Unified Policy").
-- Note in the answer that it supersedes legacy documentation (like Employee Handbook 10 days or Manager Guidelines 15 days).
-- Set `conflict` to `null`.
+If one of the retrieved sources is a newer Master/Unified Policy (or any document stating it "explicitly supersedes" legacy documentation), then that Unified Policy IS the authoritative corporate answer. In this case:
+1. In `answer`, state the definitive rule from the Unified Policy clearly, and note that it supersedes legacy documentation.
+2. YOU MUST SET `has_conflict` to `true`! The legacy documents STILL EXIST and contradict the new policy, which is a real conflict that requires cleanup.
+3. Build the `conflict` object representing the legacy contradiction. Set its `severity` to "Superseded", and set `superseded_by` to the name of the new unified document.
 
-Otherwise, if there are active conflicting policies without a clear 2026 superseding document, set `has_conflict` to `true` and report the claims.
+Otherwise, if there are active conflicting policies without a clear superseding document:
+1. Set `has_conflict` to `true`.
+2. Build the `conflict` object, set its `severity` to "High" or "Medium", and report the claims.
 
 Return JSON exactly matching this shape:
 
@@ -146,11 +148,12 @@ Return JSON exactly matching this shape:
   "has_conflict": true or false,
   "answer": "Always answer the question from the passages. If there is a material conflict, additionally state plainly that the documents disagree and no single answer can be given.",
   "citations": ["Document Name §section", ...],
-  "conflict": null, or {{
+  "conflict": {{
     "topic": "short name for the contested rule",
-    "severity": "High" | "Medium" | "Low",
+    "severity": "High" | "Medium" | "Low" | "Superseded",
     "explanation": "what disagrees with what, and why it matters to an employee",
     "recommended_action": "concrete next step for the document owners",
+    "superseded_by": "Name of the new unified document that superseded legacy ones (if applicable), else null",
     "claims": [
       {{
         "document": "exact document name from the source",
@@ -163,6 +166,8 @@ Return JSON exactly matching this shape:
     ]
   }}
 }}
+
+NOTE: If all sources agree perfectly and there is absolutely zero contradiction of any kind, return an empty object `{{}}` for `conflict`. Do NOT return `null`.
 
 Severity: High if an employee could act wrongly on it or it affects pay,
 entitlement or legal obligation. Medium if it causes confusion. Low if minor.
