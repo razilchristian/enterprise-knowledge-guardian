@@ -130,23 +130,17 @@ genuinely do not address it, say so.
 JOB 2 - Check whether the sources contradict each other ON THE POINT THE
 QUESTION ASKED, and report it if they do.
 
-A conflict means two or more sources state materially different values, limits,
-deadlines, or requirements for THE SAME rule. Different rules covering
-different topics are not a conflict. Neither is a source that simply omits
-something.
+CRITICAL RULE FOR SUPERSEDED & UNIFIED POLICIES:
+If one of the retrieved sources is a newer Master/Unified Policy (e.g. "HR Leave Policy 2026 Unified" or a document stating "explicitly supersedes all legacy documentation"), then that Unified Policy IS the authoritative corporate answer. In this case:
+- Set `has_conflict` to `false`.
+- In `answer`, state the definitive rule from the 2026 Unified Policy clearly (e.g., "Employees are entitled to 12 paid casual leave days under the 2026 Unified Policy").
+- Note in the answer that it supersedes legacy documentation (like Employee Handbook 10 days or Manager Guidelines 15 days).
+- Set `conflict` to `null`.
 
-Materiality matters. Only set has_conflict when the contradiction affects the
-answer to THIS question. If someone asks how to submit a leave request, a
-disagreement about how many days they are owed does not change the submission
-process -- answer the process, and set has_conflict to false. Set it to true
-only when the contradiction means you cannot honestly give one answer to what
-was actually asked.
-
-When there is a material conflict, you must NOT choose a winner. Report every
-conflicting claim tied to the document it came from, and say in the answer
-field that the company's documents disagree.
+Otherwise, if there are active conflicting policies without a clear 2026 superseding document, set `has_conflict` to `true` and report the claims.
 
 Return JSON exactly matching this shape:
+
 
 {{
   "has_conflict": true or false,
