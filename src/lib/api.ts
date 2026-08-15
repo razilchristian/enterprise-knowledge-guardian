@@ -357,7 +357,24 @@ export async function listWorkflows(): Promise<{ workflows: WorkflowRecord[] }> 
   return get("/api/workflows");
 }
 
-export async function runWorkflow(workflowId: string, actor?: string): Promise<any> {
+/** What a workflow run reports back. Mirrors agents.run_workflow in the backend. */
+export interface RunWorkflowResult {
+  ok: boolean;
+  workflow_id: string;
+  workflow_name: string;
+  status: string;
+  duration: string;
+  summary: string;
+  executed_at: string;
+  steps?: { name: string; status: string; detail?: string }[];
+  documents_scanned?: number;
+  conflicts_found?: number;
+}
+
+export async function runWorkflow(
+  workflowId: string,
+  actor?: string
+): Promise<RunWorkflowResult> {
   const response = await fetch(`${BASE}/api/workflows/${workflowId}/run`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

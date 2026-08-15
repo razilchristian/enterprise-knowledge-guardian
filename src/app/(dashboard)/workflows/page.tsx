@@ -5,7 +5,10 @@ import Link from "next/link";
 import { GitBranch, Play, Plus, ChevronRight, Edit, Loader2, CheckCircle2 } from "lucide-react";
 import { cn, formatRelativeTime } from "@/lib/utils";
 import { useApi } from "@/lib/use-api";
-import { listWorkflows, runWorkflow, type WorkflowRecord } from "@/lib/api";
+import {
+  listWorkflows, runWorkflow,
+  type RunWorkflowResult, type WorkflowRecord,
+} from "@/lib/api";
 import { Loading, ApiFailure } from "@/components/ui/api-state";
 
 const statusStyle: Record<string, string> = {
@@ -18,7 +21,7 @@ const statusStyle: Record<string, string> = {
 export default function WorkflowsPage() {
   const { data, loading, error, reload } = useApi(listWorkflows);
   const [runningWfId, setRunningWfId] = useState<string | null>(null);
-  const [lastResult, setLastResult] = useState<any | null>(null);
+  const [lastResult, setLastResult] = useState<RunWorkflowResult | null>(null);
 
   const handleRunWorkflow = async (workflowId: string) => {
     setRunningWfId(workflowId);

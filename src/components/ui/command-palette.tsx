@@ -77,12 +77,18 @@ export default function CommandPalette({ open, onClose }: Props) {
     return () => window.removeEventListener("keydown", handler);
   }, [open, onClose]);
 
-  useEffect(() => {
+  // Clear the search when the palette closes, so reopening starts fresh.
+  // Adjusted during render rather than in an effect: React's documented way to
+  // reset state on a prop change, and it avoids the extra render pass an
+  // effect-plus-setState would cause.
+  const [wasOpen, setWasOpen] = useState(open);
+  if (wasOpen !== open) {
+    setWasOpen(open);
     if (!open) {
       setQuery("");
       setActiveIndex(0);
     }
-  }, [open]);
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
