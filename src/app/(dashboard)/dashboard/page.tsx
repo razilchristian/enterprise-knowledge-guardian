@@ -88,7 +88,7 @@ export default function DashboardPage() {
       {/* Ask */}
       <div className="relative rounded-xl border border-nx-border bg-nx-surface p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-nx-accent to-nx-cyan">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-nx-accent to-nx-accent-hover">
             <Zap size={16} className="text-white" />
           </div>
           <input

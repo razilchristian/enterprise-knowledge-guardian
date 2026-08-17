@@ -7,6 +7,7 @@ import {
   ChevronRight, ExternalLink, Activity, Eye, Clock, Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/ui/logo";
 
 const features = [
   {
@@ -56,11 +57,11 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="fixed top-0 inset-x-0 z-50 h-16 border-b border-nx-border/50 bg-nx-bg/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto h-full flex items-center justify-between px-6">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-nx-accent to-nx-cyan flex items-center justify-center">
-              <span className="text-white font-bold text-sm">N</span>
-            </div>
-            <span className="text-base font-semibold tracking-tight">NEXORA GUARDIAN</span>
+          <div className="flex items-center gap-2.5 text-nx-accent">
+            <Logo size={28} />
+            <span className="font-serif text-base font-bold tracking-[0.02em] text-nx-text-primary">
+              NEXORA GUARDIAN
+            </span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-nx-text-muted">
             <a href="#features" className="hover:text-nx-text-primary transition-colors">Features</a>
@@ -117,7 +118,7 @@ export default function LandingPage() {
 
         {/* Product Preview */}
         <div className="max-w-5xl mx-auto mt-20 relative">
-          <div className="absolute -inset-1 bg-gradient-to-b from-nx-accent/20 via-nx-cyan/10 to-transparent rounded-2xl blur-xl" />
+          <div className="absolute -inset-1 bg-gradient-to-b from-nx-accent/20 via-nx-accent-hover/10 to-transparent rounded-2xl blur-xl" />
           <div className="relative bg-nx-surface border border-nx-border rounded-2xl overflow-hidden shadow-2xl">
             {/* Simulated dashboard */}
             <div className="h-8 border-b border-nx-border bg-nx-elevated/50 flex items-center gap-2 px-4">
@@ -129,7 +130,7 @@ export default function LandingPage() {
             <div className="p-6 space-y-4">
               {/* Simulated AI command */}
               <div className="flex items-center gap-3 bg-nx-bg border border-nx-border rounded-xl px-4 py-3">
-                <div className="w-6 h-6 rounded bg-gradient-to-br from-nx-accent to-nx-cyan flex items-center justify-center">
+                <div className="w-6 h-6 rounded bg-gradient-to-br from-nx-accent to-nx-accent-hover flex items-center justify-center">
                   <Zap size={12} className="text-white" />
                 </div>
                 <span className="text-sm text-nx-text-muted">Ask Guardian anything — every department is in scope...</span>
@@ -278,7 +279,7 @@ export default function LandingPage() {
       <footer className="border-t border-nx-border py-8 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-nx-accent to-nx-cyan flex items-center justify-center">
+            <div className="w-6 h-6 rounded bg-gradient-to-br from-nx-accent to-nx-accent-hover flex items-center justify-center">
               <span className="text-white font-bold text-[10px]">N</span>
             </div>
             <span className="text-sm font-semibold text-nx-text-muted">NEXORA GUARDIAN</span>

@@ -51,7 +51,7 @@ export default function SettingsPage() {
       {activeTab === "profile" && (
         <div className="bg-nx-surface border border-nx-border rounded-xl p-6 space-y-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-nx-accent to-nx-cyan flex items-center justify-center text-white text-xl font-semibold">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-nx-accent to-nx-accent-hover flex items-center justify-center text-white text-xl font-semibold">
               {initials(user.name)}
             </div>
             <div>

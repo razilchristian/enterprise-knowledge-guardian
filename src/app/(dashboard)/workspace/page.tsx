@@ -175,7 +175,7 @@ function Workspace() {
         <div className="flex-1 overflow-y-auto px-5 py-7 md:px-8">
           {turns.length === 0 ? (
             <div className="mx-auto flex max-w-2xl flex-col items-center pt-16 text-center">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-nx-accent to-nx-cyan text-white shadow-xl shadow-nx-accent/10">
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-nx-accent to-nx-accent-hover text-white shadow-xl shadow-nx-accent/10">
                 <Sparkles size={28} />
               </div>
               <p className="text-2xl font-semibold tracking-tight">What can I help you understand?</p>
@@ -312,7 +312,7 @@ function Workspace() {
 function Thinking() {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nx-accent to-nx-cyan text-white">
+      <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nx-accent to-nx-accent-hover text-white">
         <Bot size={16} />
       </div>
       <div className="flex-1 space-y-2 pt-1">
@@ -343,7 +343,7 @@ function ResultBlock({ result }: { result: AskResponse }) {
   return (
     <article className="space-y-5">
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nx-accent to-nx-cyan text-white">
+        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-nx-accent to-nx-accent-hover text-white">
           <Bot size={16} />
         </div>
         <div className="min-w-0 flex-1">

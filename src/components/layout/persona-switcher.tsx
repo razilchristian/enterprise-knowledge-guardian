@@ -36,7 +36,7 @@ export default function PersonaSwitcher() {
         aria-label="Switch role"
         aria-expanded={open}
       >
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-nx-accent to-nx-cyan text-[10px] font-bold text-white">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-nx-accent to-nx-accent-hover text-[10px] font-bold text-white">
           {initials(user.name)}
         </span>
         <span className="hidden text-left sm:block">

@@ -11,6 +11,7 @@ import {
   Users, Code, HardHat, ChevronsLeft, LogOut, Lock, Landmark,
   Briefcase, Globe,
 } from "lucide-react";
+import Logo from "@/components/ui/logo";
 
 interface NavItem {
   label: string;
@@ -61,25 +62,29 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "fixed top-0 left-0 z-40 h-screen flex flex-col border-r border-nx-border bg-nx-surface/95 backdrop-blur-xl transition-all duration-300 ease-in-out",
+        // Inverted panel: violet-deep ground with light text, so it reads as
+        // chrome and the paper content area reads as the document.
+        "fixed top-0 left-0 z-40 h-screen flex flex-col border-r border-nx-sidebar-border bg-nx-sidebar text-nx-sidebar-text transition-all duration-300 ease-in-out",
         collapsed ? "w-[68px]" : "w-[260px]"
       )}
     >
-      {/* Logo & Workspace */}
-      <div className="flex items-center gap-3 px-4 h-[56px] border-b border-nx-border shrink-0">
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-nx-accent via-[#755D98] to-nx-cyan shadow-lg shadow-nx-accent/10 shrink-0">
-          <span className="text-white font-black text-sm">N</span>
-        </div>
+      {/* Brand */}
+      <div className="flex items-center gap-3 px-4 h-[60px] border-b border-nx-sidebar-border shrink-0">
+        <Logo size={26} className="shrink-0 text-nx-sidebar-text" />
         {!collapsed && (
-          <div className="flex flex-col min-w-0">
-            <span className="text-sm font-semibold text-nx-text-primary tracking-tight">NEXORA GUARDIAN</span>
-            <span className="text-[11px] text-nx-text-muted truncate">Enterprise knowledge trust layer</span>
+          <div className="flex flex-col min-w-0 leading-none">
+            <span className="font-serif text-[14px] font-bold tracking-[0.02em] text-nx-sidebar-text">
+              NEXORA GUARDIAN
+            </span>
+            <span className="mt-1 truncate text-[10.5px] text-nx-sidebar-muted">
+              Enterprise knowledge trust
+            </span>
           </div>
         )}
         <button
           onClick={() => setCollapsed(!collapsed)}
           className={cn(
-            "ml-auto p-1.5 rounded-md text-nx-text-muted hover:text-nx-text-secondary hover:bg-nx-elevated transition-colors",
+            "ml-auto p-1.5 rounded-md text-nx-sidebar-muted hover:text-nx-sidebar-text hover:bg-nx-sidebar-hover transition-colors",
             collapsed && "ml-0"
           )}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -92,7 +97,7 @@ export default function Sidebar() {
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-6">
         {/* Main Nav */}
         <div className="space-y-0.5">
-          {!collapsed && <p className="px-2 mb-2 text-[11px] font-medium text-nx-text-muted uppercase tracking-wider">Platform</p>}
+          {!collapsed && <p className="px-2 mb-2 text-[11px] font-medium text-nx-sidebar-muted uppercase tracking-wider">Platform</p>}
           {mainNav.map((item) => (
             <Link
               key={item.href}
@@ -101,8 +106,8 @@ export default function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-2.5 py-2 rounded-md text-sm transition-colors group relative",
                 isActive(item.href)
-                  ? "bg-nx-accent/10 text-nx-accent shadow-[inset_2px_0_0_var(--color-nx-accent)]"
-                  : "text-nx-text-secondary hover:text-nx-text-primary hover:bg-nx-elevated"
+                  ? "bg-nx-sidebar-active text-white font-medium"
+                  : "text-nx-sidebar-text/80 hover:text-white hover:bg-nx-sidebar-hover"
               )}
             >
               <span className="shrink-0">{item.icon}</span>
@@ -111,8 +116,8 @@ export default function Sidebar() {
                 <span className={cn(
                   "ml-auto text-[11px] font-mono font-medium px-1.5 py-0.5 rounded",
                   item.label === "Conflicts"
-                    ? "bg-nx-danger-muted text-nx-danger"
-                    : "bg-nx-accent-muted text-nx-accent"
+                    ? "bg-nx-danger text-white"
+                    : "bg-white/15 text-nx-sidebar-text"
                 )}>
                   {item.badge}
                 </span>
@@ -129,10 +134,10 @@ export default function Sidebar() {
           {!collapsed && (
             <button
               onClick={() => setWsOpen(!wsOpen)}
-              className="flex items-center gap-1 px-2 mb-2 text-[11px] font-medium text-nx-text-muted uppercase tracking-wider hover:text-nx-text-secondary transition-colors w-full"
+              className="flex items-center gap-1 px-2 mb-2 text-[11px] font-medium text-nx-sidebar-muted uppercase tracking-wider hover:text-nx-sidebar-text transition-colors w-full"
             >
               Departments
-              <span title="Open to every role" className="text-nx-success"><Globe size={10} /></span>
+              <span title="Open to every role" className="text-emerald-300"><Globe size={10} /></span>
               <ChevronDown size={12} className={cn("ml-auto transition-transform", !wsOpen && "-rotate-90")} />
             </button>
           )}
@@ -141,7 +146,7 @@ export default function Sidebar() {
               key={item.label}
               href={item.href}
               title={collapsed ? item.label : undefined}
-              className="flex items-center gap-3 px-2.5 py-1.5 rounded-md text-sm text-nx-text-muted hover:text-nx-text-primary hover:bg-nx-elevated transition-colors"
+              className="flex items-center gap-3 px-2.5 py-1.5 rounded-md text-sm text-nx-sidebar-muted hover:text-white hover:bg-nx-sidebar-hover transition-colors"
             >
               <span className="shrink-0">{item.icon}</span>
               {!collapsed && <span className="truncate">{item.label}</span>}
@@ -151,7 +156,7 @@ export default function Sidebar() {
 
         {/* System */}
         <div className="space-y-0.5">
-          {!collapsed && <p className="px-2 mb-2 text-[11px] font-medium text-nx-text-muted uppercase tracking-wider">System</p>}
+          {!collapsed && <p className="px-2 mb-2 text-[11px] font-medium text-nx-sidebar-muted uppercase tracking-wider">System</p>}
           {systemNav.map((item) => (
             <Link
               key={item.href}
@@ -160,8 +165,8 @@ export default function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-2.5 py-2 rounded-md text-sm transition-colors",
                 isActive(item.href)
-                  ? "bg-nx-accent/10 text-nx-accent shadow-[inset_2px_0_0_var(--color-nx-accent)]"
-                  : "text-nx-text-secondary hover:text-nx-text-primary hover:bg-nx-elevated"
+                  ? "bg-nx-sidebar-active text-white font-medium"
+                  : "text-nx-sidebar-text/80 hover:text-white hover:bg-nx-sidebar-hover"
               )}
             >
               <span className="shrink-0">{item.icon}</span>
@@ -171,22 +176,22 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      {/* User Profile */}
-      <div className="border-t border-nx-border px-2 py-3">
+      {/* Signed-in persona */}
+      <div className="border-t border-nx-sidebar-border px-2 py-3">
         <div className={cn(
-          "flex items-center gap-3 px-2.5 py-2 rounded-md hover:bg-nx-elevated transition-colors cursor-pointer",
+          "flex items-center gap-3 px-2.5 py-2 rounded-md hover:bg-nx-sidebar-hover transition-colors cursor-pointer",
           collapsed && "justify-center"
         )}>
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-nx-accent to-nx-cyan flex items-center justify-center text-white text-xs font-bold shrink-0">
+          <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-nx-sidebar-text text-xs font-bold shrink-0">
             {initials(user.name)}
           </div>
           {!collapsed && (
             <div className="flex flex-col min-w-0 flex-1">
-              <span className="text-sm font-medium text-nx-text-primary truncate">{user.name}</span>
-              <span className="text-[11px] text-nx-text-muted truncate">{user.title} · {persona.role}</span>
+              <span className="text-sm font-medium text-nx-sidebar-text truncate">{user.name}</span>
+              <span className="text-[11px] text-nx-sidebar-muted truncate">{user.title} · {persona.role}</span>
             </div>
           )}
-          {!collapsed && <LogOut size={14} className="text-nx-text-muted shrink-0" />}
+          {!collapsed && <LogOut size={14} className="text-nx-sidebar-muted shrink-0" />}
         </div>
       </div>
     </aside>

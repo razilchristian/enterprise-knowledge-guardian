@@ -45,9 +45,8 @@ export default function DocumentsPage() {
       setUploadFile(null);
       setShowUploadModal(false);
       await docs.reload();
-    } catch (err: any) {
-      console.error(err);
-      setUploadError(err?.message || "Failed to upload document");
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Failed to upload document");
     } finally {
       setUploading(false);
     }
@@ -284,7 +283,7 @@ export default function DocumentsPage() {
 
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                 className="rounded-lg border border-nx-border bg-nx-surface px-3 py-1.5 text-xs font-medium text-nx-text-secondary focus:border-nx-accent focus:outline-none"
               >
                 <option value="name">Sort by name</option>
