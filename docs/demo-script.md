@@ -1,4 +1,4 @@
-# Tasks 10 & 11 — Deck Edits & Demo Script
+# Tasks 10 & 11 — Deck Edits & Master Demo Script
 
 ---
 
@@ -6,32 +6,25 @@
 
 ### Slide 13 — Replace entirely
 
-**Old:** (whatever was there)
-
-**New:**
-
 > ## One Company, One Truth
 >
-> Your Employee Handbook says 10 casual leave days.
-> Your HR Leave Policy says 12.
-> Your Manager Guide says 15.
+> Legal says retain data for 36 months.
+> Operations says retain for 5 years.
+> Security says retain for 60 months.
+> HR says retain for 7 years.
 >
 > A normal chatbot confidently picks one.
-> **NEXORA reports all three — and opens a review task for the document owner.**
+> **NEXORA reports all four — and opens a review task for the document owners.**
 >
 > Search finds a passage. It doesn't tell you whether that passage is still true.
 
 ### Slide 14 — Line edit
-
-Add after the current content:
 
 > Every answer includes the exact section citations it was drawn from. Every
 > conflict includes the specific claim from each source. AI recommends; humans
 > approve. Nothing is ever auto-changed.
 
 ### Slide 15 — Line edit
-
-Replace the "seat-based SaaS, tiers proposed" placeholder with:
 
 > **Starter:** $8/seat/month (up to 50 docs, 2 agents)
 > **Professional:** $15/seat/month (200 docs, unlimited queries, 8 agents)
@@ -41,130 +34,102 @@ Replace the "seat-based SaaS, tiers proposed" placeholder with:
 
 ### Slide 6 — Line edit
 
-Remove any language implying per-user access control or role-based document
-filtering. Replace with:
-
 > Every role reads every document. Roles are lenses, not gates — they change
 > what surfaces first, never what is visible. This is what makes cross-department
 > conflict detection possible.
 
-### Full deck review checklist
-
-After applying edits, scan the entire deck for:
-- [ ] Any slide still implying document-level access control
-- [ ] Any slide promising features that are not in the demo
-- [ ] Any pricing without actual numbers
-- [ ] Any architecture description that contradicts PROJECT.md §3
-
 ---
 
-## Part B: Demo Script
+## Part B: Master Demo Script (5 Minutes)
 
 ### Setup (Before Going on Stage)
 
 1. Open **Terminal 1** and start the backend:
-   ```
+   ```bash
    cd nexora/backend
    .\.venv\Scripts\python.exe -m uvicorn app.api:app --port 8000
    ```
 2. Open **Terminal 2** and start the frontend:
-   ```
+   ```bash
    cd nexora
    npm run dev
    ```
 3. Open Chrome to `http://localhost:3000/workspace`
-4. Verify the green **"All departments searched"** badge appears in the header
-5. If it shows **"Backend offline"** in red, the backend didn't start — fix before going on
-
-### Fallback Plan
-
-If the network is dead or Gemini is down:
-- Have **screenshots** of each demo step saved as a PDF
-- Narrate over the screenshots: "Here is what the system returns when connected"
-- The screenshots should show the actual three-way conflict result
+4. Verify the green **"All departments searched"** badge appears in the header.
+5. Check backend health at `http://localhost:8000/api/health` (`ok: true`, 5/5 API keys ready).
 
 ---
 
-### Script: 5 minutes
+### Demo Flow Script
 
 #### Opening (30 seconds)
 
-> "Let me show you a real problem. Your Employee Handbook says employees get 10
-> casual leave days. Your HR Leave Policy says 12. Your Manager Guide says 15.
-> A new hire asks their manager, the manager checks one document, and gives a
-> confident wrong answer. NEXORA catches that before it happens."
-
-#### Demo Step 1: The Headline (90 seconds)
-
-**Type into the workspace:** `How many casual leave days do I get?`
-
-**Wait for the result.** Talk while it loads:
-
-> "The system is now searching every department's documents simultaneously — HR,
-> Legal, Engineering, Security, all of them. It's not just finding an answer;
-> it's checking whether the sources agree with each other."
-
-**When the result appears:** Point out:
-
-1. The **"Conflict Detected"** badge in red (not "Sources agree" in green)
-2. The **three source cards** showing 10 / 12 / 15 days, each with the exact
-   document name and section number
-3. The **severity** (High Risk) and **recommended resolution**
-4. The **citations** in the right Evidence panel
-
-> "Three documents, three different numbers. A normal chatbot would confidently
-> say one of these. NEXORA refuses to guess — it reports all three and tells you
-> which documents need to be reconciled."
-
-#### Demo Step 2: Cross-Department (60 seconds)
-
-**Type:** `What is our data retention period?`
-
-**When the result appears:**
-
-> "This one is harder to catch manually. Legal's Data Processing Agreement says
-> 36 months. Security's Incident Response Playbook says 60 months. Two different
-> departments, two different retention periods. Under GDPR, that's not just
-> inconsistent — it's a compliance risk. NEXORA finds it automatically because
-> it searches across departments, not within one."
-
-#### Demo Step 3: No Conflict (45 seconds)
-
-**Type:** `How do I request time off?`
-
-**When the result appears:**
-
-> "Not everything is a conflict. Here, all sources agree on the process — submit
-> through the HR portal, get manager approval. The green 'Sources agree' badge
-> means you can trust this answer. The difference is: NEXORA earned that trust by
-> checking, instead of assuming."
-
-#### Demo Step 4: Role Switcher (45 seconds)
-
-**Click the role switcher** in the top bar. Switch from Employee to Department Owner
-to Director.
-
-> "Notice what changes and what doesn't. The dashboard prioritizes different
-> departments. But the answer to the same question is identical — because in
-> NEXORA, roles are lenses, not gates. Every person and the CEO get the same
-> truth. That's what makes conflict detection work."
-
-#### Close (30 seconds)
-
-> "Search finds a passage. It doesn't tell you whether that passage is still
-> true. NEXORA does — and when it isn't, it tells you exactly which documents
-> disagree and who needs to fix them. One company, one truth."
+> "Let me show you a real enterprise problem. A customer asks how long their personal data is retained. 
+> Legal checks the Data Processing Agreement (36 months). 
+> Operations checks the Enterprise Security Policy (5 years). 
+> Security checks the Incident Playbook (60 months). 
+> HR checks the Separation Policy (7 years). 
+> A traditional chatbot picks one at random and gives a confident, legally risky answer. 
+> NEXORA catches the contradiction before it becomes a GDPR fine."
 
 ---
 
-### Anticipated Judge Questions & Answers
+#### Demo Step 1: The 4-Department Cross-Dept Conflict (90 seconds)
+
+**Type into the workspace:** `how long do we retain personal data`
+
+**When the result appears:** Point out:
+1. The 🔴 **"Conflict Detected"** badge in red.
+2. The **4 source cards** across 4 distinct departments: Legal (36 mo), Operations (5 yrs), Security (60 mo), HR (7 yrs).
+3. The **High Risk** severity and **recommended resolution**.
+4. The exact section citations in the Evidence panel.
+
+> "Four departments, four different policies. No single department head could have caught this because nobody reads other departments' docs. NEXORA finds it automatically because it operates on an open-knowledge model — searching across departments, not within silos."
+
+---
+
+#### Demo Step 2: The Employee Eligibility Scenario (60 seconds)
+
+**Type into the workspace:** `I worked here 500 days and left. When do I get my experience letter?`
+
+**When the result appears:**
+
+> "Here is an employee who worked 500 days. NEXORA correctly confirms eligibility (>90 days service required), but flags an unresolved operational conflict: 
+> The Employee Separation Policy promises issuance within **7 working days**, while HR Service Standards specifies **15 working days**. 
+> NEXORA answers the employee while opening a cleanup task for HR."
+
+---
+
+#### Demo Step 3: Conflict Lifecycle & Policy Supersession (45 seconds)
+
+**Type into the workspace:** `How many casual leave days do I get?`
+
+**When the result appears:** Point out the 🟢 **"Sources agree"** green badge and the **12 Days** answer.
+
+> "This is what happens after an enterprise fixes a conflict. When a company issues the new 2026 Unified HR Policy, NEXORA automatically recognizes that it explicitly supersedes old legacy handbooks (which said 10 or 15 days). It delivers a clean, authoritative answer to the employee while queuing a **SUPERSEDED RISK** cleanup card for HR."
+
+---
+
+#### Demo Step 4: Role Switcher & Human-in-the-Loop Governance (45 seconds)
+
+**Click the role switcher** in the top navigation bar. Switch from **Employee** to **Sarah Chen (Department Owner)** and navigate to `http://localhost:3000/conflicts`.
+
+> "Notice how roles work: roles are lenses, not gates. Everyone sees the exact same corporate truth. As HR Lead, Sarah Chen can review the conflict, click **Accept Change**, or upload a new master PDF. Everything is logged in an immutable audit trail."
+
+---
+
+#### Close (30 seconds)
+
+> "Standard enterprise search finds a passage — it doesn't tell you if that passage is still true or contradicts another department's policy. NEXORA does. One company, one truth."
+
+---
+
+## Anticipated Mentor / Judge Q&A
 
 | Question | Answer |
 |----------|--------|
-| **"Isn't open access a security risk?"** | "Only policy documents are indexed — no salaries, no personnel files, no personal data. Within a company, everyone should be able to read the policies that apply to them. The risk is in *not* sharing: hidden policies mean hidden contradictions." |
+| **"Isn't open access a security risk?"** | "Only policy documents are indexed — no salaries, no personnel files, no personal data. Within a company, everyone should be able to read the policies that apply to them. Hidden policies mean hidden contradictions." |
 | **"What stops someone editing a policy?"** | "Write access requires the Department Owner role. Approval requires the owner or a Director. AI recommends resolutions; humans approve. Nothing is ever auto-changed." |
-| **"How is this different from ChatGPT with file upload?"** | "ChatGPT gives you a confident answer. If the sources disagree, it picks one and doesn't tell you. NEXORA checks whether the sources agree with each other *before* answering. That one extra step — the conflict check — is the entire product." |
-| **"What happens when it's wrong?"** | "Every answer includes the exact citations it was drawn from. You can click through to the source section and verify. If the AI misidentifies a conflict, the human reviewer dismisses it. The system is designed to over-report conflicts rather than miss them." |
-| **"Can it handle more than PDFs?"** | "The extraction layer is modular. Today it uses pypdf for PDFs. Adding DOCX, Markdown, or Confluence page extraction is straightforward — the chunking, embedding, and conflict detection pipeline is format-agnostic." |
-| **"What about scale?"** | "MongoDB Atlas vector search is designed for millions of vectors. Our 768-dimension embeddings are deliberately compact. The bottleneck at scale would be LLM rate limits, which we handle with retry logic and backoff." |
-| **"Why not use a commercial RAG platform?"** | "Commercial RAG platforms answer questions. They don't check whether the answer is internally consistent. The conflict detection layer is what makes NEXORA a product, not just a pipeline." |
+| **"How is this different from ChatGPT with file upload?"** | "ChatGPT gives you a confident answer. If sources disagree, it picks one silently. NEXORA checks whether sources agree with each other *before* answering. That conflict detection layer is the entire product." |
+| **"What happens when a document supersedes an old one?"** | "NEXORA's reasoning prompt detects explicit supersession clauses in newer 2026 master policies, resolves the user query cleanly with 🟢 'Sources agree', and logs a 'Superseded Risk' card for document archival." |
+| **"What about scale?"** | "MongoDB Atlas vector search is built for millions of 768-dim embeddings. We maintain a pool of 5 API keys with exponential backoff for high throughput." |
