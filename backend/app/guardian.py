@@ -16,6 +16,7 @@ sources, and a two-sided model cannot represent it.
 """
 
 import json
+import re
 from dataclasses import asdict, dataclass, field
 
 from app import config, gemini, retrieval
@@ -54,6 +55,34 @@ class Answer:
     conflict: Conflict | None
     citations: list[str]
     hits_considered: int
+    # Set when a newer policy explicitly retires the documents that disagreed.
+    # The answer is settled; the legacy documents still need editing.
+    superseded_by: str | None = None
+
+
+# A document that retires its predecessors says so in a particular way:
+# "explicitly supersedes all legacy ...". Ordinary policies also use the word
+# -- the legacy HR Leave Policy claims it "supersedes any conflicting summary
+# provided in onboarding materials" -- so matching on "supersede" alone would
+# silence real conflicts. The adverb and the word "legacy" are what separate a
+# document retiring others from one merely asserting precedence.
+SUPERSEDES = re.compile(
+    r"(explicitly|expressly)\s+supersede(s|d)?\s+(all\s+)?(prior|previous|legacy|older)",
+    re.IGNORECASE,
+)
+
+
+def _superseding_documents(hits: list[retrieval.Hit]) -> dict[str, str]:
+    """Retrieved documents that declare themselves authoritative, and the sentence saying so."""
+    found: dict[str, str] = {}
+    for hit in hits:
+        text = " ".join(hit.text.split())
+        match = SUPERSEDES.search(text)
+        if match and hit.document not in found:
+            start = text.rfind(".", 0, match.start()) + 1
+            end = text.find(".", match.end())
+            found[hit.document] = text[start : end + 1 if end != -1 else None].strip()
+    return found
 
 
 def _call_gemini(prompt: str, *, temperature: float = 0.1) -> str:
@@ -219,11 +248,38 @@ def ask(question: str, *, limit: int = 8) -> Answer:
             claims=[Claim(**{k: c.get(k, "") for k in Claim.__annotations__}) for c in blob.get("claims", [])],
         )
 
+    has_conflict = bool(data.get("has_conflict"))
+    superseded_by = None
+
+    # The model is unreliable here. Asked about casual leave with the 2026
+    # unified policy in evidence, it writes an answer that correctly says the
+    # policy supersedes the old ones -- and then sets has_conflict true anyway,
+    # listing that same policy as one of the disagreeing claims. It obeys half
+    # the instruction, and which half varies between runs.
+    #
+    # So the decision is made here rather than in the prompt. If a document that
+    # explicitly retires its predecessors is among the evidence, AND the model
+    # cited that document as one of the claims, then it governs this topic and
+    # the disagreement is already settled.
+    #
+    # Requiring it to appear in the claims is what keeps this narrow: a
+    # superseding document merely retrieved alongside an unrelated question
+    # should not silence a genuine conflict.
+    if has_conflict and conflict:
+        authoritative = _superseding_documents(hits)
+        cited = {c.document for c in conflict.claims}
+        governing = next((d for d in authoritative if d in cited), None)
+        if governing:
+            has_conflict = False
+            superseded_by = governing
+            conflict = None
+
     return Answer(
         question=question,
-        has_conflict=bool(data.get("has_conflict")),
+        has_conflict=has_conflict,
         answer=data.get("answer", ""),
         conflict=conflict,
+        superseded_by=superseded_by,
         citations=data.get("citations", []),
         hits_considered=len(hits),
     )

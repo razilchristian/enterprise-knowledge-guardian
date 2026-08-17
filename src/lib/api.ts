@@ -41,6 +41,14 @@ export interface AskResponse {
   conflict: DetectedConflict | null;
   citations: string[];
   hits_considered: number;
+  /**
+   * Set when a newer policy explicitly retired the documents that disagreed.
+   * The question is settled — but the legacy documents still say the old thing
+   * and still need editing, so this is not the same as "nothing was wrong".
+   */
+  superseded_by?: string | null;
+  conflict_id?: string | null;
+  conflict_is_new?: boolean;
 }
 
 export class ApiError extends Error {

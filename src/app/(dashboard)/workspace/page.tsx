@@ -364,6 +364,25 @@ function ResultBlock({ result }: { result: AskResponse }) {
         </div>
       </div>
 
+      {/* Settled by a newer policy. Named explicitly, because "no conflict" and
+          "a newer document already fixed this" are different facts. */}
+      {result.superseded_by && (
+        <div className="flex items-start gap-3 rounded-2xl border border-nx-success/25 bg-nx-success-muted p-4">
+          <CheckCircle2 size={17} className="mt-0.5 shrink-0 text-nx-success" />
+          <div>
+            <p className="text-sm font-semibold text-nx-success">
+              Resolved by a superseding policy
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-nx-text-secondary">
+              <strong className="text-nx-text-primary">{result.superseded_by}</strong> explicitly
+              retires the earlier documents on this point, so there is a single correct answer.
+              The legacy documents still carry the old wording and remain queued for their owners
+              to update.
+            </p>
+          </div>
+        </div>
+      )}
+
       {result.conflict && <ConflictCard conflict={result.conflict} />}
     </article>
   );
