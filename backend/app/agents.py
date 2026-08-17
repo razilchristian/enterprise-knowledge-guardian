@@ -235,16 +235,12 @@ def run_agent(agent_id: str, actor: str = "Sarah Chen") -> dict[str, Any]:
         },
     )
 
-    # Query open conflicts or generate audit summary
+    # Check if there are real open conflicts in MongoDB Atlas
     open_conflicts = db.collection(config.CONFLICTS).count_documents({"status": "Open"})
-    if open_conflicts == 0:
-        # Fallback to total recorded conflicts or active departmental policy audit
-        open_conflicts = db.collection(config.CONFLICTS).count_documents({}) or 3
-
-    summary_text = (
-        f"Agent '{agent['name']}' scanned {len(doc_titles)} documents in {dept}. "
-        f"⚠️ Flagged {open_conflicts} critical policy contradictions requiring review!"
-    )
+    if open_conflicts > 0:
+        summary_text = f"Agent '{agent['name']}' scanned {len(doc_titles)} documents in {dept}. ⚠️ Flagged {open_conflicts} critical policy contradictions requiring review!"
+    else:
+        summary_text = f"Agent '{agent['name']}' successfully scanned {len(doc_titles)} documents in {dept}. Zero critical policy leaks found."
 
     return {
         "ok": True,

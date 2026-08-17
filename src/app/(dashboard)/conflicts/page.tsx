@@ -170,7 +170,7 @@ export default function ConflictsPage() {
                 {filtered.map((conflict) => (
                   <tr key={conflict.fingerprint} className="hover:bg-nx-elevated/60 transition-colors group">
                     <td className="px-5 py-3.5">
-                      <span className={cn("inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-1 rounded border", severityStyle[conflict.severity])}>
+                      <span className={cn("inline-flex items-center gap-1 text-[11px] font-mono font-medium px-2 py-1 rounded border", severityStyle[conflict.severity] ?? severityStyle.Medium)}>
                         {conflict.severity.toUpperCase()}
                       </span>
                     </td>

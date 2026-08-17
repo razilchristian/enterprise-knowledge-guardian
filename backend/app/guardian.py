@@ -89,6 +89,24 @@ def _call_gemini(prompt: str, *, temperature: float = 0.1) -> str:
         raise GuardianError(f"Unexpected Gemini response shape: {str(payload)[:300]}") from exc
 
 
+SEVERITIES = ("High", "Medium", "Low")
+
+
+def _severity(raw: object) -> str:
+    """Force the model's severity into the three values the UI knows.
+
+    The model improvises here — it has returned "Superseded" and similar, which
+    is not a severity at all. Anything unrecognised broke the dashboard twice
+    over: the high/medium/low counts stopped summing to the number of active
+    conflicts, and the severity chip lost its styling because the lookup missed.
+
+    Whatever the model wants to say about supersession belongs in the status
+    field, not this one.
+    """
+    value = str(raw or "").strip().title()
+    return value if value in SEVERITIES else "Medium"
+
+
 def _parse_json(raw: str) -> dict:
     try:
         return json.loads(raw)
@@ -195,7 +213,7 @@ def ask(question: str, *, limit: int = 8) -> Answer:
         blob = data["conflict"]
         conflict = Conflict(
             topic=blob.get("topic", "Unnamed conflict"),
-            severity=blob.get("severity", "Medium"),
+            severity=_severity(blob.get("severity")),
             explanation=blob.get("explanation", ""),
             recommended_action=blob.get("recommended_action", ""),
             claims=[Claim(**{k: c.get(k, "") for k in Claim.__annotations__}) for c in blob.get("claims", [])],
