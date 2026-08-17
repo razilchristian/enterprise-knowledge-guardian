@@ -235,12 +235,38 @@ def run_agent(agent_id: str, actor: str = "Sarah Chen") -> dict[str, Any]:
         },
     )
 
-    # Check if there are real open conflicts in MongoDB Atlas
-    open_conflicts = db.collection(config.CONFLICTS).count_documents({"status": "Open"})
+    # Count only what this agent is responsible for. Counting every open
+    # conflict in the company made the HR auditor report Security's incident
+    # timing problem, which is not its to find and not its to fix.
+    #
+    # A conflict counts if it touches a document this agent scanned. That
+    # includes cross-department ones, correctly: if HR's handbook contradicts
+    # IT's procurement policy, the HR agent should absolutely raise it.
+    scanned = set(doc_titles)
+    mine = [
+        c
+        for c in db.collection(config.CONFLICTS).find(
+            {"status": {"$in": ["Open", "In Review"]}},
+            {"_id": 0, "documents": 1, "severity": 1, "crossDepartment": 1},
+        )
+        if scanned & set(c.get("documents", []))
+    ]
+    open_conflicts = len(mine)
+    cross = sum(1 for c in mine if c.get("crossDepartment"))
+
     if open_conflicts > 0:
-        summary_text = f"Agent '{agent['name']}' scanned {len(doc_titles)} documents in {dept}. ⚠️ Flagged {open_conflicts} critical policy contradictions requiring review!"
+        detail = f"{open_conflicts} policy contradiction{'s' if open_conflicts != 1 else ''}"
+        if cross:
+            detail += f" ({cross} crossing into another department)"
+        summary_text = (
+            f"Agent '{agent['name']}' scanned {len(doc_titles)} documents in {dept}. "
+            f"Flagged {detail} for owner review."
+        )
     else:
-        summary_text = f"Agent '{agent['name']}' successfully scanned {len(doc_titles)} documents in {dept}. Zero critical policy leaks found."
+        summary_text = (
+            f"Agent '{agent['name']}' scanned {len(doc_titles)} documents in {dept}. "
+            "No unresolved contradictions found in this department's documents."
+        )
 
     return {
         "ok": True,
@@ -250,6 +276,8 @@ def run_agent(agent_id: str, actor: str = "Sarah Chen") -> dict[str, Any]:
         "documents_scanned": len(doc_titles),
         "scanned_titles": doc_titles[:5],
         "chunks_analyzed": chunk_count,
+        "conflicts_found": open_conflicts,
+        "cross_department": cross,
         "status": "Completed",
         "duration": f"{round(time.time() - start_time + 1.2, 2)}s",
         "summary": summary_text,
