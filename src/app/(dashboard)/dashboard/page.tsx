@@ -14,6 +14,7 @@ import { useApi } from "@/lib/use-api";
 import { usePersona } from "@/lib/persona";
 import { getStats, listActivity, listConflicts } from "@/lib/api";
 import type { Role } from "@/types";
+import GuardianBot from "@/components/ui/guardian-bot";
 
 /** What each role is put in front of first. Never what they may see. */
 const LENS: Record<Role, { subtitle: string; queries: string[] }> = {
@@ -88,8 +89,8 @@ export default function DashboardPage() {
       {/* Ask */}
       <div className="relative rounded-xl border border-nx-border bg-nx-surface p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-nx-accent to-nx-accent-hover">
-            <Zap size={16} className="text-white" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-nx-accent-muted">
+            <GuardianBot mood="idle" size={26} />
           </div>
           <input
             value={question}
@@ -124,7 +125,7 @@ export default function DashboardPage() {
       {s && (
         <>
           {/* Every number below is queried from MongoDB, not hardcoded. */}
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+          <div className="stagger grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
             {metrics.map((m) => (
               <Link
                 key={m.label}
@@ -134,7 +135,7 @@ export default function DashboardPage() {
                 <span className={cn("block", m.alert && (m.value ?? 0) > 0 ? "text-nx-danger" : "text-nx-text-muted")}>
                   {m.icon}
                 </span>
-                <p className="mt-3 text-xl font-semibold tracking-tight">{m.value ?? "—"}</p>
+                <p className="tabular mt-3 text-2xl font-semibold tracking-tight">{m.value ?? "—"}</p>
                 <p className="mt-0.5 text-[11px] text-nx-text-muted">{m.label}</p>
               </Link>
             ))}
@@ -211,7 +212,7 @@ export default function DashboardPage() {
                     <div key={h.department}>
                       <div className="mb-1.5 flex items-center justify-between">
                         <span className="text-xs text-nx-text-secondary">{h.department}</span>
-                        <span className="font-mono text-xs text-nx-text-muted">{h.health}%</span>
+                        <span className="tabular font-mono text-xs text-nx-text-muted">{h.health}%</span>
                       </div>
                       <div className="h-1.5 overflow-hidden rounded-full bg-nx-elevated">
                         <div

@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ApiError, ask, health, type AskResponse } from "@/lib/api";
+import GuardianBot, { type BotMood } from "@/components/ui/guardian-bot";
+import GuardianPopup from "@/components/ui/guardian-popup";
 
 const SUGGESTIONS = [
   "How many casual leave days do I get?",
@@ -55,6 +57,30 @@ function Workspace() {
 
   const latest = turns[turns.length - 1];
   const citations = latest?.result?.citations ?? [];
+
+  // What Guardian is doing right now, in one place, so the bot in the corner
+  // and the avatar in the header always agree.
+  const mood: BotMood = pending
+    ? "thinking"
+    : latest?.result?.has_conflict
+      ? "alert"
+      : latest?.result?.superseded_by
+        ? "resolved"
+        : "idle";
+
+  const said = pending
+    ? "Searching every department, then checking the sources against each other…"
+    : latest?.error
+      ? "I could not reach the knowledge base for that one."
+      : latest?.result?.has_conflict
+        ? `Your documents disagree on this. ${latest.result.conflict?.claims.length ?? 0} sources, and I am not going to pick one for you.`
+        : latest?.result?.superseded_by
+          ? "That one is settled — a newer policy retired the older wording."
+          : latest?.result
+            ? `Answered from ${latest.result.hits_considered} passages. The sources agree.`
+            : null;
+
+  const saidDetail = latest?.result?.superseded_by ?? null;
 
   // Stable identity so the ?q= effect below can depend on it honestly rather
   // than suppressing the lint rule. The in-flight guard is a ref written only
@@ -153,8 +179,8 @@ function Workspace() {
       <section className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-between border-b border-nx-border px-5 py-4 md:px-7">
           <div className="flex min-w-0 items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-nx-accent-muted text-nx-accent">
-              <Sparkles size={17} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-nx-accent-muted">
+              <GuardianBot mood={mood} size={30} />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-nx-text-primary">Research workspace</p>
@@ -175,14 +201,14 @@ function Workspace() {
         <div className="flex-1 overflow-y-auto px-5 py-7 md:px-8">
           {turns.length === 0 ? (
             <div className="mx-auto flex max-w-2xl flex-col items-center pt-16 text-center">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-nx-accent to-nx-accent-hover text-white shadow-xl shadow-nx-accent/10">
-                <Sparkles size={28} />
+              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-nx-accent-muted">
+                <GuardianBot mood="idle" size={54} />
               </div>
               <p className="text-2xl font-semibold tracking-tight">What can I help you understand?</p>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-nx-text-muted">
                 Ask a question across your company knowledge. Every answer is grounded in sources you can inspect.
               </p>
-              <div className="mt-8 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="stagger mt-8 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
                 {SUGGESTIONS.map((prompt) => (
                   <button
                     key={prompt}
@@ -305,6 +331,8 @@ function Workspace() {
           </div>
         )}
       </aside>
+
+      <GuardianPopup mood={mood} message={said} detail={saidDetail} />
     </div>
   );
 }

@@ -166,10 +166,85 @@ h1, h2, h3 {
   animation: fadeIn 0.18s ease-out;
 }
 
+/* ── Guardian bot ──
+   Each mood drives one animation. The bot is telling you what the system is
+   doing, so the motion has to mean something: idle blinks, thinking scans,
+   alert startles once, resolved settles. */
+
+@keyframes gb-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.12); }
+}
+
+@keyframes gb-scan {
+  0%, 100% { transform: translateX(-1.4px); }
+  50%      { transform: translateX(1.4px); }
+}
+
+@keyframes gb-pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.72); }
+}
+
+@keyframes gb-startle {
+  0%, 100%    { transform: translateX(0); }
+  20%, 60%    { transform: translateX(-1.6px); }
+  40%, 80%    { transform: translateX(1.6px); }
+}
+
+@keyframes gb-settle {
+  0%   { transform: translateY(0) scale(1); }
+  35%  { transform: translateY(-3px) scale(1.04); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.gb { transform-origin: center; }
+
+/* Eyes blink from their own centre, or they slide as they shrink. */
+.gb-eyes { transform-origin: 24px 22px; }
+
+.gb-idle     .gb-eyes { animation: gb-blink 5.5s ease-in-out infinite; }
+.gb-thinking .gb-eyes { animation: gb-scan 1.1s ease-in-out infinite; }
+.gb-thinking .gb-tip  { animation: gb-pulse 0.9s ease-in-out infinite; }
+.gb-alert             { animation: gb-startle 0.45s ease-in-out 1; }
+.gb-resolved          { animation: gb-settle 0.5s ease-out 1; }
+
+/* ── Entrance, staggered ──
+   Cards arriving together read as a template. A short stagger reads as a
+   page assembling itself. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rise {
+  animation: rise 0.32s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+
+.stagger > * { animation: rise 0.32s cubic-bezier(0.22, 0.8, 0.3, 1) both; }
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.stagger > *:nth-child(7) { animation-delay: 0.26s; }
+.stagger > *:nth-child(8) { animation-delay: 0.30s; }
+
+/* Figures that line up in columns should not jitter as they change. */
+.tabular { font-variant-numeric: tabular-nums; }
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fadeIn,
   .skeleton-pulse,
-  .ai-glow {
+  .ai-glow,
+  .rise,
+  .stagger > *,
+  .gb-idle .gb-eyes,
+  .gb-thinking .gb-eyes,
+  .gb-thinking .gb-tip,
+  .gb-alert,
+  .gb-resolved {
     animation: none;
   }
 }

@@ -89,7 +89,7 @@ export default function ConflictsPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+        <div className="stagger grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
           {[
             { value: summary?.active, label: "Active Conflicts", tone: "" },
             { value: summary?.high, label: "High Risk", tone: "text-nx-danger" },
@@ -97,7 +97,7 @@ export default function ConflictsPage() {
             { value: summary?.crossDepartment, label: "Cross-Department", tone: "text-nx-accent" },
           ].map((stat) => (
             <div key={stat.label} className="bg-nx-bg/60 border border-nx-border rounded-xl p-4 text-center">
-              <p className={cn("text-2xl font-semibold", stat.tone)}>
+              <p className={cn("tabular text-2xl font-semibold", stat.tone)}>
                 {loading ? "—" : stat.value ?? 0}
               </p>
               <p className="text-[11px] text-nx-text-muted mt-1">{stat.label}</p>
