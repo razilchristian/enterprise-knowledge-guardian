@@ -110,3 +110,24 @@ CHAT_MODEL = CHAT_MODELS[0]
 # app/embeddings.py before storing. EMBED_DIM must equal numDimensions in the
 # Atlas vector index -- if they disagree, every search returns nothing.
 EMBED_DIM = 768
+
+
+# --- CORS ---
+# Which browser origins may call this API. Local dev is always allowed; the
+# deployed frontend is added through the environment, because its URL is not
+# known until Vercel assigns one.
+#
+# Set on Render as:  ALLOWED_ORIGINS=https://your-app.vercel.app
+# Comma-separated for preview deployments as well as production.
+_DEFAULT_ORIGINS = ("http://localhost:3000", "http://127.0.0.1:3000")
+
+ALLOWED_ORIGINS = tuple(
+    dict.fromkeys(
+        _DEFAULT_ORIGINS
+        + tuple(
+            o.strip().rstrip("/")
+            for o in os.getenv("ALLOWED_ORIGINS", "").split(",")
+            if o.strip()
+        )
+    )
+)

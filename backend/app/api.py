@@ -51,10 +51,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# The Next.js dev server. Widen this list when deploying somewhere else.
+# Local dev plus whatever ALLOWED_ORIGINS names, so the deployed frontend can
+# be permitted without a code change.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=list(config.ALLOWED_ORIGINS),
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )

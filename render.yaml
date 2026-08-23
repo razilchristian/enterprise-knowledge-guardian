@@ -1,0 +1,28 @@
+# Render blueprint for the Guardian backend.
+#
+# The repo root is the Next.js app, so rootDir points Render at backend/.
+# Secrets are NOT here — set MONGODB_URI and GEMINI_API_KEYS in the Render
+# dashboard, which is the whole point of keeping them out of the repo.
+services:
+  - type: web
+    name: nexora-guardian-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # Render assigns the port at runtime; binding to 0.0.0.0 is required or the
+    # service starts but is unreachable, which looks like a crash and is not.
+    startCommand: uvicorn app.api:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: MONGODB_DB
+        value: nexora
+      # Set these in the dashboard, never in this file.
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEYS
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

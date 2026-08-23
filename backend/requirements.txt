@@ -4,10 +4,16 @@ uvicorn[standard]
 python-multipart
 
 # Database
-pymongo
+pymongo                 # brings bson with it
+
+# HTTP client for the Gemini API
+requests
 
 # Config
 python-dotenv
 
 # PDF text extraction
 pypdf
+
+# PDF generation for the fallback seed corpus (scripts/make_seed_pdfs.py)
+reportlab
