@@ -75,7 +75,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-8">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6 sm:space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">{greeting}, {user.name.split(" ")[0]}.</h1>
@@ -96,12 +96,12 @@ export default function DashboardPage() {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && ask(question)}
-            placeholder="Ask Guardian anything — every department's knowledge is in scope…"
-            className="flex-1 bg-transparent text-sm text-nx-text-primary outline-none placeholder:text-nx-text-muted"
+            placeholder="Ask Guardian anything…"
+            className="min-w-0 flex-1 bg-transparent text-sm text-nx-text-primary outline-none placeholder:text-nx-text-muted"
           />
           <button
             onClick={() => ask(question)}
-            className="rounded-lg bg-nx-accent px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-nx-accent-hover"
+            className="shrink-0 whitespace-nowrap rounded-lg bg-nx-accent px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-nx-accent-hover"
           >
             Ask AI
           </button>

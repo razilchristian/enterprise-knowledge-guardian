@@ -33,7 +33,7 @@ export default function AgentDetailPage({ params }: { params: Promise<{ id: stri
   const agent = agents.find((a) => a.id === id) || agents[0];
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm">
         <Link href="/agents" className="flex items-center gap-1 text-nx-text-muted hover:text-nx-accent transition-colors">
@@ -102,7 +102,7 @@ export default function AgentDetailPage({ params }: { params: Promise<{ id: stri
               <div key={node.id} className="flex flex-col items-center">
                 {/* Node */}
                 <div className={cn(
-                  "w-[400px] p-4 rounded-xl border-2 transition-all hover:shadow-lg",
+                  "w-full max-w-[400px] p-4 rounded-xl border-2 transition-all hover:shadow-lg",
                   style.bg, style.border
                 )}>
                   <div className="flex items-start gap-3">

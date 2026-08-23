@@ -32,7 +32,7 @@ export default function IntegrationsPage() {
   };
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6">
       <RoadmapNotice what="No connector is live yet; documents are ingested from a local folder." />
 
       <div>

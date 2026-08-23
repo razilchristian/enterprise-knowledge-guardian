@@ -89,7 +89,7 @@ export default function DocumentsPage() {
   const totalChunks = (docs.data?.documents ?? []).reduce((n, d) => n + d.chunkCount, 0);
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6 md:p-8">
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1400px] mx-auto space-y-6">
       {/* Top Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
@@ -121,7 +121,7 @@ export default function DocumentsPage() {
       {/* Ingestion Success Alert Banner */}
       {uploadResult && (
         <div className="rounded-xl border border-nx-success/40 bg-nx-success-muted/20 p-4 animate-fadeIn">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <CheckCircle2 className="text-nx-success shrink-0" size={18} />
               <div>
@@ -300,7 +300,8 @@ export default function DocumentsPage() {
             />
           ) : (
             <div className="rounded-xl border border-nx-border bg-nx-surface overflow-hidden">
-              <table className="w-full text-left text-xs">
+              <div className="overflow-x-auto">
+              <table className="w-full min-w-[640px] text-left text-xs">
                 <thead>
                   <tr className="border-b border-nx-border bg-nx-elevated/50 text-[11px] font-semibold text-nx-text-muted uppercase tracking-wider">
                     <th className="py-3 px-4">Document</th>
@@ -362,6 +363,7 @@ export default function DocumentsPage() {
                   })}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
         </>

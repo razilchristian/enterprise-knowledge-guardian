@@ -56,10 +56,10 @@ export default function LandingPage() {
     <div className="min-h-screen bg-nx-bg text-nx-text-primary">
       {/* Nav */}
       <nav className="fixed top-0 inset-x-0 z-50 h-16 border-b border-nx-border/50 bg-nx-bg/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto h-full flex items-center justify-between px-6">
-          <div className="flex items-center gap-2.5 text-nx-accent">
+        <div className="max-w-6xl mx-auto h-full flex items-center justify-between gap-3 px-4 sm:px-6">
+          <div className="flex min-w-0 items-center gap-2 text-nx-accent sm:gap-2.5">
             <Logo size={28} />
-            <span className="font-serif text-base font-bold tracking-[0.02em] text-nx-text-primary">
+            <span className="whitespace-nowrap font-serif text-sm font-bold tracking-[0.02em] text-nx-text-primary sm:text-base">
               NEXORA GUARDIAN
             </span>
           </div>
@@ -70,15 +70,15 @@ export default function LandingPage() {
           </div>
           <Link
             href="/dashboard"
-            className="px-4 py-2 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-sm font-medium transition-colors"
+            className="shrink-0 whitespace-nowrap rounded-lg bg-nx-accent px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-nx-accent-hover sm:px-4 sm:text-sm"
           >
-            Enter Workspace
+            Enter<span className="hidden sm:inline"> Workspace</span>
           </Link>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-6 relative overflow-hidden">
+      <section className="relative overflow-hidden px-4 pb-16 pt-24 sm:px-6 sm:pb-20 sm:pt-32">
         {/* Background elements */}
         <div className="absolute inset-0 bg-grid opacity-40" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-nx-accent/5 rounded-full blur-3xl" />
@@ -89,7 +89,7 @@ export default function LandingPage() {
             AI-powered enterprise intelligence platform
           </div>
 
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
             Enterprise intelligence,
             <br />
             <span className="text-gradient">in motion.</span>
@@ -100,7 +100,7 @@ export default function LandingPage() {
             Nexora Guardian verifies, connects, and governs enterprise knowledge.
           </p>
 
-          <div className="flex items-center justify-center gap-4 mt-10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-10">
             <Link
               href="/dashboard"
               className="flex items-center gap-2 px-6 py-3 rounded-xl bg-nx-accent hover:bg-nx-accent-hover text-white font-medium transition-colors shadow-lg shadow-nx-accent/20"
@@ -136,7 +136,7 @@ export default function LandingPage() {
                 <span className="text-sm text-nx-text-muted">Ask Guardian anything — every department is in scope...</span>
               </div>
               {/* Simulated metrics */}
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
                 {[
                   { label: "Documents", value: "12,482", icon: <FileText size={14} /> },
                   { label: "Conflicts", value: "8", icon: <AlertTriangle size={14} /> },

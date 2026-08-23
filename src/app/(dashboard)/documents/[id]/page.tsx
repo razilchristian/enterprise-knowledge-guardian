@@ -27,7 +27,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
   }, [conflicts.data, record]);
 
   return (
-    <div className="p-6 max-w-[1100px] mx-auto space-y-6 md:p-8">
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1100px] mx-auto space-y-6">
       <Link href="/documents" className="inline-flex items-center gap-1.5 text-xs text-nx-accent hover:underline">
         <ArrowLeft size={13} /> All documents
       </Link>

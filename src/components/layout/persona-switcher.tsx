@@ -49,7 +49,7 @@ export default function PersonaSwitcher() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-12 z-50 w-[340px] overflow-hidden rounded-xl border border-nx-border bg-nx-surface shadow-2xl">
+          <div className="fixed right-3 top-[68px] z-50 w-[calc(100vw-1.5rem)] overflow-hidden rounded-xl border border-nx-border bg-nx-surface shadow-2xl sm:absolute sm:right-0 sm:top-12 sm:w-[340px]">
             <div className="border-b border-nx-border px-4 py-3">
               <div className="flex items-center gap-2">
                 <Users size={13} className="text-nx-accent" />

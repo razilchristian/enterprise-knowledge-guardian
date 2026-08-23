@@ -56,9 +56,9 @@ export default function WorkflowDetailPage({ params }: { params: Promise<{ id: s
   const selected = workflowNodes.find((n) => n.id === selectedNode);
 
   return (
-    <div className="flex h-[calc(100vh-56px)]">
+    <div className="flex h-[calc(100vh-64px)]">
       {/* Node Library */}
-      <div className="w-[220px] border-r border-nx-border bg-nx-surface shrink-0 flex flex-col">
+      <div className="hidden w-[220px] border-r border-nx-border bg-nx-surface shrink-0 lg:flex flex-col">
         <div className="px-3 py-3 border-b border-nx-border">
           <Link href="/workflows" className="flex items-center gap-1 text-xs text-nx-text-muted hover:text-nx-accent transition-colors mb-2">
             <ArrowLeft size={12} /> Back to Workflows
@@ -86,16 +86,19 @@ export default function WorkflowDetailPage({ params }: { params: Promise<{ id: s
       {/* Workflow Canvas */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Toolbar */}
-        <div className="h-12 border-b border-nx-border bg-nx-surface/80 flex items-center justify-between px-4">
-          <div>
-            <span className="text-sm font-semibold">{wf.name}</span>
-            <span className="text-[11px] text-nx-text-muted ml-2 font-mono">{workflowNodes.length} nodes</span>
+        <div className="h-12 border-b border-nx-border bg-nx-surface/80 flex items-center justify-between gap-2 px-4">
+          <div className="flex min-w-0 items-center gap-2">
+            <Link href="/workflows" className="shrink-0 text-nx-text-muted transition-colors hover:text-nx-accent lg:hidden" aria-label="Back to workflows">
+              <ArrowLeft size={14} />
+            </Link>
+            <span className="truncate text-sm font-semibold">{wf.name}</span>
+            <span className="hidden shrink-0 font-mono text-[11px] text-nx-text-muted sm:inline">{workflowNodes.length} nodes</span>
           </div>
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-nx-border text-xs text-nx-text-secondary hover:bg-nx-elevated transition-colors">
+            <button className="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg border border-nx-border text-xs text-nx-text-secondary hover:bg-nx-elevated transition-colors sm:flex">
               <Save size={12} /> Save
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-nx-border text-xs text-nx-text-secondary hover:bg-nx-elevated transition-colors">
+            <button className="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg border border-nx-border text-xs text-nx-text-secondary hover:bg-nx-elevated transition-colors sm:flex">
               <Play size={12} /> Test
             </button>
             <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-nx-accent hover:bg-nx-accent-hover text-white text-xs font-medium transition-colors">
@@ -105,8 +108,8 @@ export default function WorkflowDetailPage({ params }: { params: Promise<{ id: s
         </div>
 
         {/* Canvas */}
-        <div className="flex-1 overflow-auto bg-nx-bg bg-grid p-8">
-          <div className="flex flex-col items-center gap-0 min-w-[400px] max-w-[480px] mx-auto">
+        <div className="flex-1 overflow-auto bg-nx-bg bg-grid p-4 md:p-8">
+          <div className="flex flex-col items-center gap-0 w-full max-w-[480px] mx-auto">
             {workflowNodes.map((node, i) => (
               <div key={node.id} className="flex flex-col items-center w-full">
                 <div
@@ -144,7 +147,7 @@ export default function WorkflowDetailPage({ params }: { params: Promise<{ id: s
       </div>
 
       {/* Configuration Panel */}
-      <div className="w-[280px] border-l border-nx-border bg-nx-surface shrink-0 flex flex-col">
+      <div className="hidden w-[280px] border-l border-nx-border bg-nx-surface shrink-0 xl:flex flex-col">
         <div className="px-4 py-3 border-b border-nx-border">
           <h2 className="text-sm font-semibold">Configuration</h2>
         </div>

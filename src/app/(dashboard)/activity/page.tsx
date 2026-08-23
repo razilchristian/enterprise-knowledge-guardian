@@ -35,7 +35,7 @@ export default function ActivityPage() {
   const humanCount = (data?.events ?? []).length - aiCount;
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6 md:p-8">
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1400px] mx-auto space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-nx-accent">Audit trail</p>
@@ -58,7 +58,7 @@ export default function ActivityPage() {
 
       {!loading && !error && (
         <>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {[
               { label: "Total events", value: data?.events.length ?? 0, icon: <ActivityIcon size={18} />, tone: "" },
               { label: "AI actions", value: aiCount, icon: <Bot size={18} />, tone: "text-nx-accent" },

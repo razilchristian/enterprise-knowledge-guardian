@@ -45,8 +45,8 @@ export default function WorkflowsPage() {
   const workflowList: WorkflowRecord[] = data?.workflows ?? [];
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold tracking-tight">Workflows</h1>
@@ -89,7 +89,8 @@ export default function WorkflowsPage() {
       )}
 
       <div className="bg-nx-surface border border-nx-border rounded-xl overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px]">
           <thead>
             <tr className="border-b border-nx-border">
               <th className="text-left px-5 py-3 text-[11px] font-medium text-nx-text-muted uppercase tracking-wider">Workflow</th>
@@ -150,6 +151,7 @@ export default function WorkflowsPage() {
             })}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

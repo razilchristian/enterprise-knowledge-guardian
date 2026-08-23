@@ -65,17 +65,17 @@ export default function ConflictsPage() {
   const filtered = filter === "All" ? conflicts : conflicts.filter((c) => c.severity === filter);
 
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-6 md:p-8">
+    <div className="p-4 sm:p-6 md:p-8 max-w-[1400px] mx-auto space-y-6">
       {/* Hero */}
       <div className="relative overflow-hidden bg-nx-surface border border-nx-border rounded-2xl p-6 shadow-sm md:p-7">
         <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-nx-danger/10 blur-3xl" />
-        <div className="flex items-start gap-4">
+        <div className="flex flex-wrap items-start gap-4">
           <div className="p-3 rounded-xl bg-nx-danger-muted border border-nx-danger/20">
             <AlertTriangle size={24} className="text-nx-danger" />
           </div>
-          <div className="relative flex-1">
+          <div className="relative min-w-[180px] flex-1">
             <p className="text-[10px] font-semibold tracking-[0.16em] text-nx-danger uppercase">Risk control center</p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight">Resolve contradictions before they spread.</h1>
+            <h1 className="mt-1 text-xl font-semibold tracking-tight sm:text-2xl">Resolve contradictions before they spread.</h1>
             <p className="text-sm text-nx-text-muted mt-1">
               Every conflict below was found by comparing what your documents actually say, across all six departments.
             </p>
@@ -83,7 +83,7 @@ export default function ConflictsPage() {
           <button
             onClick={refresh}
             disabled={loading}
-            className="shrink-0 flex items-center gap-1.5 rounded-lg border border-nx-border px-3 py-2 text-xs font-medium text-nx-text-secondary transition-colors hover:bg-nx-elevated disabled:opacity-50"
+            className="order-last flex shrink-0 items-center gap-1.5 rounded-lg border border-nx-border px-3 py-2 text-xs font-medium text-nx-text-secondary transition-colors hover:bg-nx-elevated disabled:opacity-50 sm:order-none"
           >
             <RefreshCw size={13} className={cn(loading && "animate-spin")} /> Refresh
           </button>
@@ -107,7 +107,7 @@ export default function ConflictsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-1 bg-nx-surface border border-nx-border rounded-xl p-1 w-fit">
+      <div className="flex w-fit max-w-full items-center gap-1 overflow-x-auto rounded-xl border border-nx-border bg-nx-surface p-1">
         {(["All", "High", "Medium", "Low"] as const).map((sev) => (
           <button
             key={sev}

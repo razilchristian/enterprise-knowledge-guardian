@@ -45,7 +45,7 @@ export default function GuardianPopup({ mood, message, detail }: Props) {
     <div
       aria-live="polite"
       className={cn(
-        "pointer-events-none fixed bottom-6 right-6 z-40 max-w-[330px] transition-all duration-300",
+        "pointer-events-none fixed bottom-4 right-4 z-40 max-w-[calc(100vw-2rem)] transition-all duration-300 sm:bottom-6 sm:right-6 sm:max-w-[330px]",
         visible ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"
       )}
     >

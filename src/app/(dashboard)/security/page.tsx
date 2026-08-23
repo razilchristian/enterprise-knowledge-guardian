@@ -43,7 +43,7 @@ const complianceStatusStyle: Record<string, string> = {
 
 export default function TrustCenterPage() {
   return (
-    <div className="p-6 max-w-[1400px] mx-auto space-y-8">
+    <div className="p-4 sm:p-6 max-w-[1400px] mx-auto space-y-6 sm:space-y-8">
       <div>
         <h1 className="text-xl font-semibold tracking-tight">Trust Center</h1>
         <p className="text-sm text-nx-text-muted mt-0.5">How knowledge is shared, who can change it, and how AI is governed</p>

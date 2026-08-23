@@ -177,34 +177,34 @@ function Workspace() {
 
       {/* Main column */}
       <section className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-nx-border px-5 py-4 md:px-7">
+        <header className="flex items-center justify-between gap-3 border-b border-nx-border px-4 py-4 sm:px-5 md:px-7">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-nx-accent-muted">
               <GuardianBot mood={mood} size={30} />
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold text-nx-text-primary">Research workspace</p>
-              <p className="truncate text-[11px] text-nx-text-muted">Grounded answers across your organization</p>
+              <p className="hidden truncate text-[11px] text-nx-text-muted sm:block">Grounded answers across your organization</p>
             </div>
           </div>
           {backendUp === false ? (
-            <div className="flex items-center gap-2 rounded-full border border-nx-danger/25 bg-nx-danger-muted px-2.5 py-1.5 text-[11px] font-medium text-nx-danger">
-              <WifiOff size={12} /> Backend offline
+            <div className="flex shrink-0 items-center gap-2 rounded-full border border-nx-danger/25 bg-nx-danger-muted px-2.5 py-1.5 text-[11px] font-medium text-nx-danger">
+              <WifiOff size={12} /> <span className="hidden sm:inline">Backend offline</span><span className="sm:hidden">Offline</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 rounded-full border border-nx-success/20 bg-nx-success-muted px-2.5 py-1.5 text-[11px] font-medium text-nx-success">
-              <Globe size={12} /> All departments searched
+            <div className="flex shrink-0 items-center gap-2 rounded-full border border-nx-success/20 bg-nx-success-muted px-2.5 py-1.5 text-[11px] font-medium text-nx-success">
+              <Globe size={12} /> <span className="hidden sm:inline">All departments searched</span><span className="sm:hidden">All depts</span>
             </div>
           )}
         </header>
 
-        <div className="flex-1 overflow-y-auto px-5 py-7 md:px-8">
+        <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-5 sm:py-7 md:px-8">
           {turns.length === 0 ? (
-            <div className="mx-auto flex max-w-2xl flex-col items-center pt-16 text-center">
-              <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-nx-accent-muted">
+            <div className="mx-auto flex max-w-2xl flex-col items-center pt-6 text-center sm:pt-16">
+              <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-nx-accent-muted sm:mb-6 sm:h-20 sm:w-20">
                 <GuardianBot mood="idle" size={54} />
               </div>
-              <p className="text-2xl font-semibold tracking-tight">What can I help you understand?</p>
+              <p className="text-xl font-semibold tracking-tight sm:text-2xl">What can I help you understand?</p>
               <p className="mt-2 max-w-md text-sm leading-relaxed text-nx-text-muted">
                 Ask a question across your company knowledge. Every answer is grounded in sources you can inspect.
               </p>
@@ -213,10 +213,10 @@ function Workspace() {
                   <button
                     key={prompt}
                     onClick={() => submit(prompt)}
-                    className="rounded-xl border border-nx-border bg-nx-surface p-3.5 text-left text-xs text-nx-text-secondary transition-colors hover:border-nx-accent/50 hover:bg-nx-elevated"
+                    className="flex items-center justify-between gap-2 rounded-xl border border-nx-border bg-nx-surface p-3.5 text-left text-xs text-nx-text-secondary transition-colors hover:border-nx-accent/50 hover:bg-nx-elevated"
                   >
-                    {prompt}
-                    <ChevronRight size={14} className="mt-2 text-nx-accent" />
+                    <span>{prompt}</span>
+                    <ChevronRight size={14} className="shrink-0 text-nx-accent" />
                   </button>
                 ))}
               </div>
