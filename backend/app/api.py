@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 from typing import Any
 
 from bson import ObjectId
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -71,17 +71,26 @@ class AskRequest(BaseModel):
 
 
 @app.get("/")
-def root() -> dict[str, Any]:
+def root(request: Request) -> dict[str, Any]:
     """Signpost for anyone who opens the base URL in a browser.
 
-    Without this, visiting http://localhost:8000 returns a bare 404 that reads
-    like the server is broken when it is running perfectly.
+    Without this, visiting the base URL returns a bare 404 that reads like the
+    server is broken when it is running perfectly.
+
+    The links are derived, not hardcoded: the deployed API used to tell anyone
+    who opened it to visit localhost, which reads as a half-finished service.
     """
+    base = str(request.base_url).rstrip("/")
+    deployed_ui = next(
+        (o for o in config.ALLOWED_ORIGINS
+         if "localhost" not in o and "127.0.0.1" not in o),
+        None,
+    )
     return {
         "service": "Nexora Guardian API",
         "status": "running",
-        "ui": "http://localhost:3000/workspace",
-        "docs": "http://localhost:8000/docs",
+        "ui": f"{deployed_ui or 'http://localhost:3000'}/workspace",
+        "docs": f"{base}/docs",
         "endpoints": {
             "POST /api/ask": "Ask a question; returns the answer and any conflict",
             "GET /api/health": "Dependency status",
