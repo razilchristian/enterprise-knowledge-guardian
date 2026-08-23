@@ -6,7 +6,9 @@
  * secret-handling story, so keep all provider calls behind this API.
  */
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Trailing slash stripped because every call below builds `${BASE}/api/...`,
+// and a pasted "https://host.com/" would otherwise produce a double slash.
+const BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000").replace(/\/+$/, "");
 
 /** One source's position on a contested point. */
 export interface ConflictClaim {
