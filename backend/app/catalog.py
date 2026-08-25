@@ -37,6 +37,15 @@ CATALOG: dict[str, tuple[str, str]] = {
 
     "Expense Reimbursement Policy": ("Finance", "Rachel Kim"),
     "Q3 2024 Financial Summary": ("Finance", "Rachel Kim"),
+
+    # The 2026 master policies. Each is owned by the department that owned the
+    # legacy documents it supersedes -- not by whoever happened to upload it,
+    # which is what the UI's upload form recorded and why these are listed here.
+    "HR_Leave_Policy_2026_Unified": ("Human Resources", "Sarah Chen"),
+    "GLOBAL_PERFORMANCE_REVIEW_POLICY_2026_UNIFIED": ("Human Resources", "Sarah Chen"),
+    "GLOBAL_ENTERPRISE_DATA_RETENTION_POLICY_2026_UNIFIED": ("Legal", "Michael Torres"),
+    "GLOBAL_ENTERPRISE_VENDOR_PROCUREMENT_MASTER_2026": ("Legal", "Michael Torres"),
+    "GLOBAL_SECURITY_INCIDENT_RESPONSE_MASTER_2026": ("Security", "James Rivera"),
 }
 
 DEFAULT = ("Operations", "Unassigned")

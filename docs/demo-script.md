@@ -1,4 +1,11 @@
-# Tasks 10 & 11 — Deck Edits & Master Demo Script
+# Deck Edits & Master Demo Script
+
+**Every question in this script was run against the live deployment on
+26 August 2026 and the stated result is what actually came back.** Do not
+change a question without re-running it — the previous version of this file
+opened with a data-retention question that had since been resolved by a
+unified policy, and would have shown a green "sources agree" answer at the
+exact moment the script promised a red four-way conflict.
 
 ---
 
@@ -8,13 +15,12 @@
 
 > ## One Company, One Truth
 >
-> Legal says retain data for 36 months.
-> Operations says retain for 5 years.
-> Security says retain for 60 months.
-> HR says retain for 7 years.
+> The Employee Handbook says return your laptop within 5 business days.
+> IT Procurement says the final day of employment — with a payroll deduction
+> after 24 hours.
 >
 > A normal chatbot confidently picks one.
-> **NEXORA reports all four — and opens a review task for the document owners.**
+> **NEXORA reports both — and opens a review task for the document owners.**
 >
 > Search finds a passage. It doesn't tell you whether that passage is still true.
 
@@ -26,11 +32,12 @@
 
 ### Slide 15 — Line edit
 
-> **Starter:** $8/seat/month (up to 50 docs, 2 agents)
-> **Professional:** $15/seat/month (200 docs, unlimited queries, 8 agents)
+> **Starter:** ₹499/seat/month (up to 50 docs, 2 agents)
+> **Professional:** ₹999/seat/month (200 docs, unlimited queries, 8 agents)
 > **Enterprise:** Custom (unlimited, SSO, dedicated deployment)
 >
-> A 20-seat Professional deployment costs $2,880/year — less than one policy incident.
+> A 20-seat Professional deployment costs ₹1.92 lakh/year — less than one
+> policy incident, and about 5% of a GRC platform.
 
 ### Slide 6 — Line edit
 
@@ -40,96 +47,187 @@
 
 ---
 
-## Part B: Master Demo Script (5 Minutes)
+## Part B: Setup (Before Going on Stage)
 
-### Setup (Before Going on Stage)
+The system is deployed. There is nothing to start.
 
-1. Open **Terminal 1** and start the backend:
-   ```bash
-   cd nexora/backend
-   .\.venv\Scripts\python.exe -m uvicorn app.api:app --port 8000
-   ```
-2. Open **Terminal 2** and start the frontend:
-   ```bash
-   cd nexora
-   npm run dev
-   ```
-3. Open Chrome to `http://localhost:3000/workspace`
-4. Verify the green **"All departments searched"** badge appears in the header.
-5. Check backend health at `http://localhost:8000/api/health` (`ok: true`, 5/5 API keys ready).
+| | URL |
+|---|---|
+| Frontend (Vercel) | https://enterprise-knowledge-guardian.vercel.app |
+| Backend (Render) | https://nexora-guardian-api.onrender.com |
 
----
+**T-minus 10 minutes — wake the backend.** Render's free tier sleeps a service
+after 15 minutes with no traffic, and the first request after that takes
+roughly 50–60 seconds. During that window the dashboard reads "Backend
+unavailable", which looks like a crash and is not.
 
-### Demo Flow Script
+1. Open `https://nexora-guardian-api.onrender.com/api/health`.
+   Wait for it. Confirm `"ok": true`, `"mongodb": "connected"`,
+   `"vectorIndex": "queryable"`, and that the API keys read `ready`.
+2. Open the workspace and ask one throwaway question so the whole path is warm.
+3. Leave the tab open. Any request inside 15 minutes keeps it awake, and during
+   the demo the frontend itself supplies that traffic.
+4. Confirm the green **"All departments searched"** badge in the workspace header.
 
-#### Opening (30 seconds)
-
-> "Let me show you a real enterprise problem. A customer asks how long their personal data is retained. 
-> Legal checks the Data Processing Agreement (36 months). 
-> Operations checks the Enterprise Security Policy (5 years). 
-> Security checks the Incident Playbook (60 months). 
-> HR checks the Separation Policy (7 years). 
-> A traditional chatbot picks one at random and gives a confident, legally risky answer. 
-> NEXORA catches the contradiction before it becomes a GDPR fine."
+**Backup:** if the venue's network fails, play the recorded 2-minute demo video.
+Do not attempt to run the backend locally on stage.
 
 ---
 
-#### Demo Step 1: The 4-Department Cross-Dept Conflict (90 seconds)
+## Part C: Master Demo Script (5 Minutes)
 
-**Type into the workspace:** `how long do we retain personal data`
+The arc is deliberate: **problem → scale → resolution → honesty → daily use.**
+Two red conflicts remain open on purpose. A knowledge base with nothing wrong
+in it proves nothing.
 
-**When the result appears:** Point out:
-1. The 🔴 **"Conflict Detected"** badge in red.
-2. The **4 source cards** across 4 distinct departments: Legal (36 mo), Operations (5 yrs), Security (60 mo), HR (7 yrs).
-3. The **High Risk** severity and **recommended resolution**.
-4. The exact section citations in the Evidence panel.
+### Opening (30 seconds)
 
-> "Four departments, four different policies. No single department head could have caught this because nobody reads other departments' docs. NEXORA finds it automatically because it operates on an open-knowledge model — searching across departments, not within silos."
-
----
-
-#### Demo Step 2: The Employee Eligibility Scenario (60 seconds)
-
-**Type into the workspace:** `I worked here 500 days and left. When do I get my experience letter?`
-
-**When the result appears:**
-
-> "Here is an employee who worked 500 days. NEXORA correctly confirms eligibility (>90 days service required), but flags an unresolved operational conflict: 
-> The Employee Separation Policy promises issuance within **7 working days**, while HR Service Standards specifies **15 working days**. 
-> NEXORA answers the employee while opening a cleanup task for HR."
+> "An employee is leaving. They ask a simple question: when do I have to return
+> my laptop? HR's handbook says one thing. IT's procurement policy says
+> another — and one of them attaches a payroll deduction. Nobody has ever read
+> both documents side by side, because nobody reads other departments' policies.
+> Let me show you what our system does with that."
 
 ---
 
-#### Demo Step 3: Conflict Lifecycle & Policy Supersession (45 seconds)
+### Step 1 — The live conflict (75 seconds) 🔴 HIGH
 
-**Type into the workspace:** `How many casual leave days do I get?`
+**Ask:** `What is the equipment return deadline when I leave?`
 
-**When the result appears:** Point out the 🟢 **"Sources agree"** green badge and the **12 Days** answer.
+**Actual result:** High-severity conflict. Employee Handbook v3.2 says *within
+five business days of the last working day*; IT Procurement Policy says *no
+later than the final day of employment*, with payroll deduction if not returned
+within 24 hours. Two departments — Human Resources and Operations.
 
-> "This is what happens after an enterprise fixes a conflict. When a company issues the new 2026 Unified HR Policy, NEXORA automatically recognizes that it explicitly supersedes old legacy handbooks (which said 10 or 15 days). It delivers a clean, authoritative answer to the employee while queuing a **SUPERSEDED RISK** cleanup card for HR."
+Point at:
+1. The red **conflict** badge and **High** severity.
+2. The **two source cards**, each with its department, owner, and a verbatim quote.
+3. The citations — every claim traceable to a section.
 
----
-
-#### Demo Step 4: Role Switcher & Human-in-the-Loop Governance (45 seconds)
-
-**Click the role switcher** in the top navigation bar. Switch from **Employee** to **Sarah Chen (Department Owner)** and navigate to `http://localhost:3000/conflicts`.
-
-> "Notice how roles work: roles are lenses, not gates. Everyone sees the exact same corporate truth. As HR Lead, Sarah Chen can review the conflict, click **Accept Change**, or upload a new master PDF. Everything is logged in an immutable audit trail."
-
----
-
-#### Close (30 seconds)
-
-> "Standard enterprise search finds a passage — it doesn't tell you if that passage is still true or contradicts another department's policy. NEXORA does. One company, one truth."
+> "It did not pick one. It cannot pick one — deciding which policy is correct
+> has consequences, and that decision belongs to the document's owner. What it
+> does is put both claims in front of a named human with the evidence attached."
 
 ---
 
-## Anticipated Mentor / Judge Q&A
+### Step 2 — Not a one-off (60 seconds) 🟡 MEDIUM
+
+**Ask:** `I worked here 500 days and left. When do I get my experience letter?`
+
+**Actual result:** Confirms eligibility (500 days exceeds the 90-day minimum),
+then reports the conflict: Employee Separation and Documentation Policy says
+**7 working days**, HR Service Standards says **15 working days**.
+
+> "Notice it still answered the employee's question — eligibility confirmed —
+> and *then* flagged that the two HR documents disagree on when. This is the
+> scenario my mentor described: someone worked here, left, and the new employer
+> is waiting on that letter. Which number does HR tell them?"
+
+*(This is the moment the room recognises the problem as real. Take the beat.)*
+
+---
+
+### Step 3 — What resolution looks like (60 seconds) 🟢
+
+**Ask:** `How many casual leave days do I get?`
+
+**Actual result:** Clean answer — **12 days**, citing HR Leave Policy 2026
+Unified, and stating that it explicitly supersedes legacy documentation.
+
+> "Three documents used to disagree here: 10 days, 12 days, 15 days. HR issued a
+> unified 2026 policy. Nobody told the system which document now wins — it read
+> the supersession clause and worked it out. That is the difference between
+> a search index and something that understands what it retrieved."
+
+Optionally open **Conflicts** and show the board: **7 resolved, 2 still open.**
+
+> "Nine contradictions found. Seven closed by their owners. Two still open, and
+> the system knows whose they are."
+
+---
+
+### Step 4 — Honesty (45 seconds) ⚪
+
+**Ask:** `What is our maternity leave policy?`
+
+**Actual result:** *"Based on the provided policy documents, there is no mention
+of a maternity leave policy."* Citations: **empty**.
+
+> "This is the answer most AI tools get wrong. Ask a general-purpose assistant
+> about a policy that doesn't exist and it will write you a plausible one.
+> Ours returns nothing, and cites nothing, because there was nothing to cite."
+
+**Invite the challenge:** *"Ask it anything you like — including something
+completely outside our documents."*
+
+Verified refusals, all with empty citations: capital of France · write a Python
+function · annual bonus amount · permanent work from another country · pet
+adoption policy.
+
+---
+
+### Step 5 — Everyday use (30 seconds) 🟢
+
+**Ask:** `How do I request time off?`
+
+**Actual result:** Straight procedural answer — submit through the HR portal at
+least five business days in advance, routed to your direct manager.
+
+> "And most days, it is simply this. A question, an answer, and the sections it
+> came from. The conflict detection runs whether or not there is a conflict —
+> you just don't see it when there isn't one."
+
+---
+
+### Close (30 seconds)
+
+> "Enterprise search finds a passage. It does not tell you whether that passage
+> is still true, or whether another department contradicts it. That gap is where
+> policy incidents come from, and it is the entire product.
+> One company, one truth."
+
+---
+
+## Part D: Anticipated Judge Q&A
 
 | Question | Answer |
 |----------|--------|
-| **"Isn't open access a security risk?"** | "Only policy documents are indexed — no salaries, no personnel files, no personal data. Within a company, everyone should be able to read the policies that apply to them. Hidden policies mean hidden contradictions." |
-| **"What stops someone editing a policy?"** | "Write access requires the Department Owner role. Approval requires the owner or a Director. AI recommends resolutions; humans approve. Nothing is ever auto-changed." |
-| **"How is this different from ChatGPT with file upload?"** | "ChatGPT gives you a confident answer. If sources disagree, it picks one silently. NEXORA checks whether sources agree with each other *before* answering. That conflict detection layer is the entire product." |
-| **"What happens when a document supersedes an old one?"** | "NEXORA's reasoning prompt detects explicit supersession clauses in newer 2026 master policies, resolves the user query cleanly with 🟢 'Sources agree', and logs a 'Superseded Risk' card for document archival." |
-| **"What about scale?"** | "MongoDB Atlas vector search is built for millions of 768-dim embeddings. We maintain a pool of 5 API keys with exponential backoff for high throughput." |
+| **"Did you train a model on your documents?"** | "No — and that's the advantage. It's retrieval-augmented: the question is embedded, the closest passages are pulled from the vector index, and the model answers using only those. Adding a policy takes 30 seconds. Fine-tuning would mean retraining every time a document changes." |
+| **"Isn't open access a security risk?"** | "Only policy documents are indexed — no salaries, no personnel files, no personal data. Within a company, everyone should be able to read the policies that apply to them. Hidden policies mean hidden contradictions, and cross-department detection is impossible if departments can't see each other." |
+| **"What stops someone editing a policy?"** | "Reading is open; writing and approving are not. Write access requires the Department Owner role, approval requires the owner or a Director. AI recommends resolutions; humans approve. Nothing is ever auto-changed." |
+| **"How is this different from ChatGPT with file upload?"** | "ChatGPT gives you a confident answer. If your sources disagree, it silently picks one. We check whether the sources agree with each other *before* answering, and report the disagreement instead of hiding it. That layer is the product." |
+| **"What if a question is outside your documents?"** | "It says so and cites nothing — we tested that. Honest caveat: there's no similarity threshold in retrieval, so the vector search always returns its top 8 passages. The grounding comes from the prompt instruction, and it held on every off-corpus question we tried. A score threshold is the next hardening step." |
+| **"How does it know a policy superseded another?"** | "The newer master policies carry an explicit supersession clause. When one is retrieved alongside the documents it replaces, the system treats it as authoritative, answers cleanly, and keeps the legacy contradiction on the board as cleanup work rather than pretending it vanished." |
+| **"What about scale?"** | "Atlas vector search handles millions of 768-dimension embeddings, and cost scales with questions asked, not corpus size — the LLM call happens once per question, not once per document. Honest limit today: we're on free tiers. The Gemini keys are pooled with backoff for resilience, but they're on one Google account, so they share a quota — that's redundancy against a failing key, not extra throughput." |
+| **"Why is it slow the first time?"** | "Render's free tier sleeps idle services. A paid instance removes it entirely — it's a hosting-plan limitation, not an architecture one." |
+
+---
+
+## Part E: Verified Question Bank
+
+Safe to use live. Every one confirmed on the deployed system, 26 August 2026.
+
+**Open conflicts — will show red:**
+- What is the equipment return deadline when I leave? → 🔴 High
+- When will I receive my experience letter? → 🟡 Medium
+- I worked here 500 days and left. When do I get my experience letter? → 🟡 Medium
+
+**Resolved by a unified policy — will show green:**
+- How many casual leave days do I get? → 12 days
+- How many paid time off days do I get? → 12 CL + 15 PTO
+- What is our data retention period? → 36 months
+- What is the vendor liability cap? → 2× annual contract value
+- How often are performance reviews conducted? → semi-annual
+- How quickly must a security incident be reported? → 15 minutes (P1/P2)
+
+**Plain answers, no conflict:**
+- How do I request time off?
+- What is the company code of conduct?
+
+**Correctly refused, empty citations:**
+- What is our maternity leave policy?
+- How much annual bonus do employees get?
+- Can I work permanently from another country?
+- What is our company pet adoption policy?
+- What is the capital of France?
+- Write me a Python function to sort a list

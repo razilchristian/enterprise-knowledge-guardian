@@ -1,5 +1,13 @@
 # Deliverable 6 — Seat-Based SaaS Pricing Model
 
+**All figures in Indian rupees.** NEXORA is priced for an India-first
+go-to-market, so the currency is not a converted afterthought — the price
+points, the acquisition costs, and the value calculations are all built on
+Indian salary and vendor rates. Where a cost is genuinely billed in dollars
+(Google, MongoDB), that is stated and converted at an assumed **₹85 = $1**.
+
+---
+
 ## Pricing Philosophy
 
 NEXORA's pricing is tied to the **value delivered**, not the volume of data
@@ -13,7 +21,7 @@ escalation, and legal exposure than the annual cost of the software.
 
 | | **Starter** | **Professional** | **Enterprise** |
 |---|---|---|---|
-| **Price** | **$8 / seat / month** | **$15 / seat / month** | **Custom pricing** |
+| **Price** | **₹499 / seat / month** | **₹999 / seat / month** | **Custom (~₹1,800 / seat)** |
 | **Billed** | Monthly or annually (20% discount) | Monthly or annually (20% discount) | Annual contract |
 | **Target** | 200–500 employees | 500–2,000 employees | 2,000+ employees |
 | **Document limit** | Up to 50 documents | Up to 200 documents | Unlimited |
@@ -26,22 +34,18 @@ escalation, and legal exposure than the annual cost of the software.
 | **Support** | Email (48h response) | Priority email + chat (4h) | Dedicated CSM + SLA |
 | **Deployment** | Shared cloud | Shared cloud | Dedicated / on-premise option |
 
+### Why not simply convert a dollar price?
+
+A US-priced product converted at ₹85 would land at ₹680 and ₹1,275 per seat.
+That is close to where we landed, but arriving there by conversion would be an
+accident. The Indian numbers are set against Indian alternatives: an HR or
+legal hour costs ₹4,000–8,000 fully loaded here, not $200–500. Pricing above
+what the saved hour is worth locally is how imported SaaS pricing fails in
+this market.
+
 ---
 
-## Why These Prices?
-
-### The cost comparison
-
-| Scenario | Cost without NEXORA | Cost with NEXORA |
-|----------|-------------------|-----------------|
-| **One policy contradiction reaches an employee** | $2,000–$10,000 (HR escalation, legal review, policy remediation, trust damage) | $0 (caught before it reaches anyone) |
-| **Annual manual policy review** (legal + HR time) | $15,000–$40,000 (40–80 hours × $200–500/hr fully loaded) | Continuous, automated |
-| **Audit finding for inconsistent policies** | $5,000–$50,000 (remediation + compliance penalties) | Prevented |
-| **GRC platform (ServiceNow, Workiva)** | $100,000+/year + 6–12 month implementation | $2,160–$5,400/year for a 15-person team |
-
-NEXORA costs less than a single policy incident. The ROI is immediate.
-
-### The seat model
+## The Seat Model
 
 Not every employee needs a seat. The primary users are:
 
@@ -49,19 +53,42 @@ Not every employee needs a seat. The primary users are:
 - **Directors** who see cross-department issues (3–5 seats)
 - **Power users** (legal analysts, HR coordinators) who query policies daily (5–20 seats)
 
-A typical 800-person company needs **15–30 seats**, not 800.
+A typical 800-person company needs **15–30 seats**, not 800. Everyone in the
+company can still *read* every document — the open-knowledge model is the
+product — but a seat is what you buy to review, approve, and be accountable.
 
 ---
 
-## Worked Example: Acme Corp (800 employees, $80M revenue)
+## Why These Prices? The Cost Comparison
+
+| Scenario | Cost without NEXORA | Cost with NEXORA |
+|----------|-------------------|-----------------|
+| **One policy contradiction reaches an employee** | ₹75,000–3,00,000 (HR escalation, legal review, remediation, trust damage) | ₹0 (caught before it reaches anyone) |
+| **Annual manual policy review** | ₹1.6–6.4 lakh (40–80 hours × ₹4,000–8,000/hr fully loaded) | Continuous, automated |
+| **Audit finding for inconsistent policies** | ₹2–15 lakh (remediation + compliance penalties) | Prevented |
+| **GRC platform (ServiceNow, Workiva)** | ₹40 lakh+/year + 6–12 month implementation | ₹1.9–3.6 lakh/year for a 20-seat team |
+
+### The number that actually sells this
+
+The largest single exposure in our own demo corpus is not an HR inconvenience.
+It is the **vendor liability cap**: one document said 1× annual contract value,
+another said 2×. On a ₹5 crore contract, signing the wrong one is a **₹5 crore
+difference in exposure** — roughly 260× the annual cost of the Professional
+tier for that entire company.
+
+Hours saved is the comfortable argument. Risk avoided is the real one.
+
+---
+
+## Worked Example: Acme Corp (800 employees)
 
 ### Professional tier, 20 seats
 
 | Line item | Calculation | Amount |
 |-----------|------------|--------|
-| Monthly cost | 20 seats × $15/seat | **$300/month** |
-| Annual cost (monthly billing) | $300 × 12 | **$3,600/year** |
-| Annual cost (annual billing, 20% off) | $3,600 × 0.80 | **$2,880/year** |
+| Monthly cost | 20 seats × ₹999 | **₹19,980 / month** |
+| Annual cost (monthly billing) | ₹19,980 × 12 | **₹2,39,760 / year** |
+| Annual cost (annual billing, 20% off) | ₹2,39,760 × 0.80 | **₹1,91,808 / year** |
 
 ### Value delivered
 
@@ -69,35 +96,38 @@ A typical 800-person company needs **15–30 seats**, not 800.
 |--------|---------------|-------------|
 | Policy contradictions discovered per year | 2 (by accident) | 8+ (proactively) |
 | Time to discover a contradiction | 3–14 months | < 1 day |
-| Annual policy review cost | $25,000 (legal + HR hours) | $5,000 (review findings only) |
-| Cost of one escalated contradiction | ~$5,000 | $0 (prevented) |
+| Annual policy review cost | ₹3,00,000 (legal + HR hours) | ₹50,000 (review findings only) |
+| Cost of one escalated contradiction | ~₹1,50,000 | ₹0 (prevented) |
 
 ### ROI calculation
 
 ```
 Annual savings:
-  Policy review time saved:          $20,000
-  Prevented escalations (2 × $5,000): $10,000
-  Total savings:                      $30,000
+  Policy review time saved:               ₹2,50,000
+  Prevented escalations (2 × ₹1,50,000):  ₹3,00,000
+  Total quantified savings:               ₹5,50,000
 
-Annual NEXORA cost:                   $2,880
+Annual NEXORA cost (annual billing):      ₹1,91,808
 
-ROI: ($30,000 - $2,880) / $2,880 = 9.4x return
-Payback period: < 2 months
+ROI: (₹5,50,000 − ₹1,91,808) / ₹1,91,808 = 1.9x return
+Payback period: ~4 months
 ```
+
+This deliberately excludes the vendor-liability figure above. Including even
+one avoided contract error would make the ROI look implausible, and an ROI a
+judge does not believe is worth less than a smaller one they do.
 
 ---
 
 ## Revenue Projections
 
-| Year | Customers | Avg. seats/customer | Avg. tier | MRR | ARR |
-|------|-----------|-------------------|-----------|-----|-----|
-| Year 1 | 20 | 15 | Starter ($8) | $2,400 | $28,800 |
-| Year 2 | 80 | 20 | Professional ($15) | $24,000 | $288,000 |
-| Year 3 | 200 | 25 | Professional ($15) | $75,000 | $900,000 |
+| Year | Customers | Avg. seats | Avg. tier | MRR | ARR |
+|------|-----------|-----------|-----------|-----|-----|
+| Year 1 | 20 | 15 | Starter (₹499) | ₹1.50 lakh | **₹18 lakh** |
+| Year 2 | 80 | 20 | Professional (₹999) | ₹15.98 lakh | **₹1.92 crore** |
+| Year 3 | 200 | 25 | Professional (₹999) | ₹49.95 lakh | **₹5.99 crore** |
 
-These are conservative estimates assuming organic growth, no enterprise deals,
-and no price increases.
+Conservative: organic growth, no enterprise deals, no price increases.
 
 ---
 
@@ -123,15 +153,15 @@ ARPA is per *account*, not per seat, because a company buys a block of seats.
 
 | Tier | Price / seat / mo | Typical seats | **ARPA / month** | ARPA / year |
 |---|---|---|---|---|
-| Starter | $8 | 15 | **$120** | $1,440 |
-| Professional | $15 | 20 | **$300** | $3,600 |
-| Enterprise | ~$25 negotiated | 40 | **$1,000** | $12,000 |
+| Starter | ₹499 | 15 | **₹7,485** | ₹89,820 |
+| Professional | ₹999 | 20 | **₹19,980** | ₹2,39,760 |
+| Enterprise | ~₹1,800 negotiated | 40 | **₹72,000** | ₹8,64,000 |
 
 **Blended ARPA (Year 2 mix: 60% Starter, 35% Professional, 5% Enterprise):**
 
 ```
-(0.60 × $120) + (0.35 × $300) + (0.05 × $1,000)
-=   $72       +     $105      +      $50        =  $227 / month
+(0.60 × ₹7,485) + (0.35 × ₹19,980) + (0.05 × ₹72,000)
+=    ₹4,491     +      ₹6,993      +      ₹3,600      =  ₹15,084 / month
 ```
 
 ### Gross margin
@@ -140,22 +170,30 @@ A seat-based AI product only works if inference cost stays far below price.
 Ours does, and it is worth showing the arithmetic because judges expect AI
 startups to be quietly unprofitable.
 
-| Cost line | Per account / month | Basis |
-|---|---|---|
-| LLM inference | $4.00 | 20 seats × 100 queries × 2 calls, at flash-lite rates |
-| Embeddings | $0.40 | Re-embedding on document updates only; ingestion is one-time |
-| Vector DB + storage | $12.00 | Allocated share of a shared Atlas cluster |
-| Support & success | $18.00 | Blended, weighted to onboarding months |
-| **Total COGS** | **$34.40** | |
+**These costs are billed in US dollars.** Google and MongoDB do not invoice in
+rupees, so this is the one place the exchange rate genuinely matters.
+
+| Cost line | USD / account / mo | ₹ at ₹85 | Basis |
+|---|---|---|---|
+| LLM inference | $4.00 | ₹340 | 20 seats × 100 queries × 2 calls, at flash-lite rates |
+| Embeddings | $0.40 | ₹34 | Re-embedding on document updates only; ingestion is one-time |
+| Vector DB + storage | $12.00 | ₹1,020 | Allocated share of a shared Atlas cluster |
+| Support & success | $18.00 | ₹1,530 | Blended, weighted to onboarding months |
+| **Total COGS** | **$34.40** | **₹2,924** | |
 
 ```
-Gross margin at Professional ARPA:  ($300 − $34.40) / $300  =  88%
-Conservative figure used below:                                85%
+Gross margin at Professional ARPA:  (₹19,980 − ₹2,924) / ₹19,980  =  85%
+Gross margin at blended ARPA:       (₹15,084 − ₹2,924) / ₹15,084  =  81%
+Conservative blended figure used below:                              80%
 ```
 
 The margin holds because retrieval is cheap and the expensive step — the LLM
 call — happens once per question, not once per document. Cost scales with
 questions asked, not with corpus size.
+
+**FX exposure, stated plainly:** revenue is in rupees, roughly 19% of cost is
+in dollars. A rupee depreciation to ₹95 raises COGS to ₹3,268 and drops the
+blended margin from 81% to 78%. Material, but not structural.
 
 ### Lifetime Value (LTV)
 
@@ -171,55 +209,67 @@ re-inheriting the problem.
 
 | Tier | ARPA | Lifetime | Margin | **LTV** |
 |---|---|---|---|---|
-| Starter | $120 | 36 mo | 85% | **$3,672** |
-| Professional | $300 | 36 mo | 85% | **$9,180** |
-| Enterprise | $1,000 | 48 mo | 85% | **$40,800** |
-| **Blended** | $227 | 36 mo | 85% | **$6,946** |
+| Starter | ₹7,485 | 36 mo | 80% | **₹2.16 lakh** |
+| Professional | ₹19,980 | 36 mo | 85% | **₹6.11 lakh** |
+| Enterprise | ₹72,000 | 48 mo | 85% | **₹29.38 lakh** |
+| **Blended** | ₹15,084 | 36 mo | 80% | **₹4.34 lakh** |
 
 ### Customer Acquisition Cost (CAC)
 
 Built bottom-up from how the first hundred customers are actually reached
-(see `go-to-market.md`), not taken from an industry average.
+(see `go-to-market.md`), on Indian cost basis — not converted from a US figure.
 
 | Cost line | Per customer | Basis |
 |---|---|---|
-| Founder sales time | $900 | 18 hours × $50/hr loaded, across demo, trial support, close |
-| Content & SEO | $400 | Allocated cost of content producing inbound leads |
-| Outbound tooling & lists | $200 | Email tooling, data enrichment |
-| Trial infrastructure | $100 | Compute for trials that do not convert |
-| **Blended CAC** | **$1,600** | |
+| Founder sales time | ₹21,600 | 18 hours × ₹1,200/hr loaded, across demo, trial support, close |
+| Content & SEO | ₹30,000 | Allocated cost of content producing inbound leads |
+| Outbound tooling & lists | ₹15,000 | Email tooling, data enrichment |
+| Trial infrastructure | ₹8,400 | Compute for trials that do not convert |
+| **Founder-led CAC** | **₹75,000** | |
+
+**This number does not survive scale, and we say so.** Founder-led selling is
+cheap because founder time is priced at cost, not at what a salesperson costs.
+Once acquisition moves to a hired AE plus paid channels, CAC rises to roughly
+**₹1,25,000**. Both are shown below.
 
 ### The health check
 
 The event guide sets one explicit bar: **LTV / CAC > 3**.
 
-| Metric | Value | Bar | Verdict |
-|---|---|---|---|
-| **LTV / CAC (blended)** | $6,946 / $1,600 = **4.3×** | > 3 | ✅ Healthy |
-| **LTV / CAC (Professional)** | $9,180 / $1,600 = **5.7×** | > 3 | ✅ Healthy |
-| **CAC payback period** | $1,600 / ($227 × 0.85) = **8.3 months** | < 12 | ✅ Healthy |
+| Metric | Founder-led (₹75,000 CAC) | Scaled (₹1,25,000 CAC) | Bar | Verdict |
+|---|---|---|---|---|
+| **LTV / CAC (blended)** | **5.8×** | **3.5×** | > 3 | ✅ Healthy |
+| **LTV / CAC (Professional)** | **8.2×** | **4.9×** | > 3 | ✅ Healthy |
+| **CAC payback period** | **6.2 months** | **10.4 months** | < 12 | ✅ Healthy |
+
+The honest reading is the right-hand column. The 5.8× is what the business
+looks like while the founders are the sales team; 3.5× is what it looks like
+as a company.
 
 ### What breaks this
 
 Stated plainly, because a judge will look for it:
 
 - **If churn is worse than 24% annually**, LTV falls fast. At 40% annual churn
-  the lifetime drops to 30 months and blended LTV/CAC falls to 3.6× — still
-  above the bar, but the margin for error is gone.
-- **If CAC exceeds $2,300**, blended LTV/CAC drops below 3× and the model
-  stops working. This is why the first hundred customers are founder-led and
-  inbound-heavy rather than bought through paid acquisition.
-- **The Starter tier alone does not sustain the business** at $3,672 LTV
-  against $1,600 CAC (2.3×). Starter is a land-and-expand entry point; the
-  model depends on upgrade to Professional, not on Starter volume.
+  the lifetime drops to 30 months, blended LTV falls to ₹3.62 lakh, and scaled
+  LTV/CAC drops to **2.9× — below the bar**. Retention is the assumption this
+  model is most exposed to, not price.
+- **If scaled CAC exceeds ₹1,45,000**, blended LTV/CAC drops below 3× and the
+  model stops working. This is why the first hundred customers are founder-led
+  and inbound-heavy rather than bought through paid acquisition.
+- **The Starter tier alone does not sustain the business** at ₹2.16 lakh LTV
+  against ₹75,000 CAC (2.9×), and it goes underwater entirely at scaled CAC.
+  Starter is a land-and-expand entry point; the model depends on upgrade to
+  Professional, not on Starter volume.
 
-### In Indian rupees
+### For international comparison
 
-For an India-first go-to-market, at ₹85 = $1:
+At ₹85 = $1, for a judge benchmarking against US SaaS:
 
-| Metric | USD | INR |
+| Metric | INR | USD equivalent |
 |---|---|---|
-| Professional ARPA / month | $300 | ₹25,500 |
-| Blended LTV | $6,946 | ₹5.9 lakh |
-| Blended CAC | $1,600 | ₹1.36 lakh |
-| Year 3 ARR | $900,000 | ₹7.65 crore |
+| Professional price / seat / month | ₹999 | ~$11.75 |
+| Professional ARPA / month | ₹19,980 | ~$235 |
+| Blended LTV | ₹4.34 lakh | ~$5,110 |
+| Scaled CAC | ₹1.25 lakh | ~$1,470 |
+| Year 3 ARR | ₹5.99 crore | ~$705,000 |
