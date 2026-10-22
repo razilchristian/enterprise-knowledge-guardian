@@ -8,15 +8,15 @@ document here, but only the owning department may change one.
 
 CATALOG: dict[str, tuple[str, str]] = {
     # filename stem -> (department, owner)
-    "Employee Handbook v3.2": ("Human Resources", "Sarah Chen"),
-    "HR Leave Policy": ("Human Resources", "Sarah Chen"),
-    "Manager Guide": ("Human Resources", "Sarah Chen"),
-    "Employee Onboarding Checklist": ("Human Resources", "Sarah Chen"),
-    "Annual Performance Review Framework": ("Human Resources", "Sarah Chen"),
-    "Code of Conduct": ("Human Resources", "Sarah Chen"),
+    "Employee Handbook v3.2": ("Human Resources", "Kajal Thakkar"),
+    "HR Leave Policy": ("Human Resources", "Kajal Thakkar"),
+    "Manager Guide": ("Human Resources", "Kajal Thakkar"),
+    "Employee Onboarding Checklist": ("Human Resources", "Kajal Thakkar"),
+    "Annual Performance Review Framework": ("Human Resources", "Kajal Thakkar"),
+    "Code of Conduct": ("Human Resources", "Kajal Thakkar"),
     # Underscored filenames, matching how these two arrived.
-    "Employee_Separation_and_Documentation_Policy": ("Human Resources", "Sarah Chen"),
-    "HR_Service_Standards": ("Human Resources", "Sarah Chen"),
+    "Employee_Separation_and_Documentation_Policy": ("Human Resources", "Kajal Thakkar"),
+    "HR_Service_Standards": ("Human Resources", "Kajal Thakkar"),
 
     "Vendor Master Agreement": ("Legal", "Michael Torres"),
     "Vendor Risk Assessment Matrix": ("Legal", "Michael Torres"),
@@ -41,8 +41,8 @@ CATALOG: dict[str, tuple[str, str]] = {
     # The 2026 master policies. Each is owned by the department that owned the
     # legacy documents it supersedes -- not by whoever happened to upload it,
     # which is what the UI's upload form recorded and why these are listed here.
-    "HR_Leave_Policy_2026_Unified": ("Human Resources", "Sarah Chen"),
-    "GLOBAL_PERFORMANCE_REVIEW_POLICY_2026_UNIFIED": ("Human Resources", "Sarah Chen"),
+    "HR_Leave_Policy_2026_Unified": ("Human Resources", "Kajal Thakkar"),
+    "GLOBAL_PERFORMANCE_REVIEW_POLICY_2026_UNIFIED": ("Human Resources", "Kajal Thakkar"),
     "GLOBAL_ENTERPRISE_DATA_RETENTION_POLICY_2026_UNIFIED": ("Legal", "Michael Torres"),
     "GLOBAL_ENTERPRISE_VENDOR_PROCUREMENT_MASTER_2026": ("Legal", "Michael Torres"),
     "GLOBAL_SECURITY_INCIDENT_RESPONSE_MASTER_2026": ("Security", "James Rivera"),

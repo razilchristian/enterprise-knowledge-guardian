@@ -40,7 +40,7 @@ export default function DocumentsPage() {
     setUploading(true);
     setUploadError(null);
     try {
-      const res = await uploadDocument(uploadFile, uploadDept, "Dev Anand");
+      const res = await uploadDocument(uploadFile, uploadDept, "Shivam Upadhyay");
       setUploadResult({ filename: res.filename, chunks: res.chunks_stored });
       setUploadFile(null);
       setShowUploadModal(false);

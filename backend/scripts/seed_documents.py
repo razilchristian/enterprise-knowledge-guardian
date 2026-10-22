@@ -23,7 +23,7 @@ DOCUMENTS = [
         "title": "Employee Handbook",
         "version": "3.2",
         "department": "Human Resources",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "sections": [
             ("1.1", "Purpose and Scope", [
                 "This handbook describes the terms, expectations, and benefits that apply to all "
@@ -89,7 +89,7 @@ DOCUMENTS = [
         "title": "HR Leave Policy",
         "version": "2.1",
         "department": "Human Resources",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "sections": [
             ("1.0", "Purpose", [
                 "This policy defines leave eligibility, entitlement, and approval requirements for "
@@ -123,7 +123,7 @@ DOCUMENTS = [
         "title": "Manager Guide",
         "version": "1.4",
         "department": "Human Resources",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "sections": [
             ("1.0", "About This Guide", [
                 "This guide supports people managers in applying Acme Corporation's employment "
@@ -181,7 +181,7 @@ DOCUMENTS = [
         "title": "Employee Onboarding Checklist",
         "version": "3.0",
         "department": "Human Resources",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "sections": [
             ("1.0", "Before Day One", [
                 "Human Resources issues the signed offer letter, collects identity and right-to-work "
@@ -207,7 +207,7 @@ DOCUMENTS = [
         "title": "Annual Performance Review Framework",
         "version": "2.1",
         "department": "Human Resources",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "sections": [
             ("1.1", "Purpose", [
                 "This framework describes how performance is assessed at Acme Corporation, the "

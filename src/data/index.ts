@@ -40,8 +40,8 @@ export const personas: Persona[] = [
 export const demoUsers: Record<Role, User> = {
   Employee: {
     id: "u-3",
-    name: "Dev Anand",
-    email: "dev.anand@acmecorp.com",
+    name: "Shivam Upadhyay",
+    email: "shivam.upadhyay@acmecorp.com",
     avatar: "/avatar.png",
     role: "Employee",
     title: "Associate Engineer",
@@ -49,8 +49,8 @@ export const demoUsers: Record<Role, User> = {
   },
   "Department Owner": {
     id: "u-2",
-    name: "Sarah Chen",
-    email: "sarah.chen@acmecorp.com",
+    name: "Kajal Thakkar",
+    email: "kajal.thakkar@acmecorp.com",
     avatar: "/avatar.png",
     role: "Department Owner",
     title: "Head of Human Resources",
@@ -58,8 +58,8 @@ export const demoUsers: Record<Role, User> = {
   },
   Director: {
     id: "u-1",
-    name: "Alex Morgan",
-    email: "alex.morgan@acmecorp.com",
+    name: "Razil Christian",
+    email: "razil.christian@acmecorp.com",
     avatar: "/avatar.png",
     role: "Director",
     title: "Chief Executive Officer",
@@ -72,8 +72,8 @@ export const currentUser: User = demoUsers.Employee;
 
 // ── Documents ──
 export const documents: Document[] = [
-  { id: "doc-1", name: "Employee Handbook v3.2", type: "PDF", owner: "Sarah Chen", department: "Human Resources", lastUpdated: new Date(Date.now() - 3600000 * 2), status: "Conflict Detected", risk: "High", version: "3.2", size: "2.4 MB", pages: 94, aiConfidence: 96, summary: "Comprehensive employee guidelines covering onboarding, benefits, leave, conduct, and termination. Guardian detected a conflicting casual-leave entitlement across three HR sources.", keyFindings: ["Casual leave entitlement conflicts with HR Policy §4.2 and Manager Guide §3.1", "Outdated reference to 2023 benefits package", "Missing GDPR data handling addendum"], entities: ["GDPR", "Casual Leave", "OSHA", "FMLA"], referencedPolicies: ["HR Leave Policy", "Manager Guide", "Benefits Guide"] },
-  { id: "doc-2", name: "HR Leave Policy", type: "DOCX", owner: "Sarah Chen", department: "Human Resources", lastUpdated: new Date(Date.now() - 3600000 * 5), status: "Analyzed", risk: "High", version: "2.1", size: "840 KB", pages: 18, aiConfidence: 94, summary: "Defines leave eligibility, casual leave entitlement, and manager approval requirements." },
+  { id: "doc-1", name: "Employee Handbook v3.2", type: "PDF", owner: "Kajal Thakkar", department: "Human Resources", lastUpdated: new Date(Date.now() - 3600000 * 2), status: "Conflict Detected", risk: "High", version: "3.2", size: "2.4 MB", pages: 94, aiConfidence: 96, summary: "Comprehensive employee guidelines covering onboarding, benefits, leave, conduct, and termination. Guardian detected a conflicting casual-leave entitlement across three HR sources.", keyFindings: ["Casual leave entitlement conflicts with HR Policy §4.2 and Manager Guide §3.1", "Outdated reference to 2023 benefits package", "Missing GDPR data handling addendum"], entities: ["GDPR", "Casual Leave", "OSHA", "FMLA"], referencedPolicies: ["HR Leave Policy", "Manager Guide", "Benefits Guide"] },
+  { id: "doc-2", name: "HR Leave Policy", type: "DOCX", owner: "Kajal Thakkar", department: "Human Resources", lastUpdated: new Date(Date.now() - 3600000 * 5), status: "Analyzed", risk: "High", version: "2.1", size: "840 KB", pages: 18, aiConfidence: 94, summary: "Defines leave eligibility, casual leave entitlement, and manager approval requirements." },
   { id: "doc-3", name: "Security Incident Response Playbook", type: "PDF", owner: "James Rivera", department: "Security", lastUpdated: new Date(Date.now() - 86400000 * 330), status: "Outdated", risk: "Critical", version: "1.8", size: "3.1 MB", pages: 67 },
   { id: "doc-4", name: "Vendor Master Agreement", type: "PDF", owner: "Michael Torres", department: "Legal", lastUpdated: new Date(Date.now() - 86400000 * 3), status: "Analyzed", risk: "Medium", version: "4.0", size: "1.9 MB", pages: 42 },
   { id: "doc-5", name: "API Architecture Guidelines", type: "MD", owner: "Priya Patel", department: "Engineering", lastUpdated: new Date(Date.now() - 3600000 * 12), status: "Analyzed", risk: "Low", version: "2.3", size: "320 KB", pages: 28 },
@@ -83,11 +83,11 @@ export const documents: Document[] = [
   { id: "doc-9", name: "IT Procurement Policy", type: "PDF", owner: "James Rivera", department: "Operations", lastUpdated: new Date(Date.now() - 86400000 * 60), status: "Outdated", risk: "Medium", version: "1.4", size: "680 KB", pages: 19 },
   { id: "doc-10", name: "Non-Disclosure Agreement Template", type: "DOCX", owner: "Michael Torres", department: "Legal", lastUpdated: new Date(Date.now() - 86400000 * 2), status: "Analyzed", risk: "Low", version: "5.2", size: "210 KB", pages: 8 },
   { id: "doc-11", name: "SOC 2 Compliance Report", type: "PDF", owner: "James Rivera", department: "Security", lastUpdated: new Date(Date.now() - 86400000 * 45), status: "Needs Review", risk: "High", version: "2.0", size: "5.8 MB", pages: 112 },
-  { id: "doc-12", name: "Employee Onboarding Checklist", type: "DOCX", owner: "Sarah Chen", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 8), status: "Analyzed", risk: "Low", version: "3.0", size: "340 KB", pages: 12 },
+  { id: "doc-12", name: "Employee Onboarding Checklist", type: "DOCX", owner: "Kajal Thakkar", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 8), status: "Analyzed", risk: "Low", version: "3.0", size: "340 KB", pages: 12 },
   { id: "doc-13", name: "Cloud Infrastructure Runbook", type: "MD", owner: "Priya Patel", department: "Engineering", lastUpdated: new Date(Date.now() - 3600000 * 48), status: "Analyzed", risk: "Low", version: "4.1", size: "520 KB", pages: 34 },
-  { id: "doc-14", name: "Annual Performance Review Framework", type: "PDF", owner: "Sarah Chen", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 90), status: "Outdated", risk: "Medium", version: "2.1", size: "1.1 MB", pages: 27 },
+  { id: "doc-14", name: "Annual Performance Review Framework", type: "PDF", owner: "Kajal Thakkar", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 90), status: "Outdated", risk: "Medium", version: "2.1", size: "1.1 MB", pages: 27 },
   { id: "doc-15", name: "Vendor Risk Assessment Matrix", type: "PPTX", owner: "Michael Torres", department: "Legal", lastUpdated: new Date(Date.now() - 86400000 * 5), status: "Conflict Detected", risk: "High", version: "1.3", size: "2.8 MB", pages: 16 },
-  { id: "doc-16", name: "Code of Conduct", type: "PDF", owner: "Sarah Chen", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 120), status: "Needs Review", risk: "Medium", version: "2.0", size: "780 KB", pages: 22 },
+  { id: "doc-16", name: "Code of Conduct", type: "PDF", owner: "Kajal Thakkar", department: "Human Resources", lastUpdated: new Date(Date.now() - 86400000 * 120), status: "Needs Review", risk: "Medium", version: "2.0", size: "780 KB", pages: 22 },
   { id: "doc-17", name: "Disaster Recovery Plan", type: "PDF", owner: "James Rivera", department: "Security", lastUpdated: new Date(Date.now() - 86400000 * 200), status: "Outdated", risk: "Critical", version: "1.2", size: "2.3 MB", pages: 48 },
   { id: "doc-18", name: "Release Management Process", type: "MD", owner: "Priya Patel", department: "Engineering", lastUpdated: new Date(Date.now() - 86400000 * 3), status: "Analyzed", risk: "Low", version: "3.5", size: "280 KB", pages: 15 },
   { id: "doc-19", name: "Expense Reimbursement Policy", type: "DOCX", owner: "Rachel Kim", department: "Finance", lastUpdated: new Date(Date.now() - 86400000 * 30), status: "Analyzed", risk: "Low", version: "2.4", size: "190 KB", pages: 9 },
@@ -111,13 +111,13 @@ export const conflicts: Conflict[] = [
 // ── Agents ──
 export const agents: Agent[] = [
   { id: "agent-1", name: "Contract Review Agent", description: "Analyzes vendor contracts for risk, compliance gaps, and unfavorable terms. Compares clauses against internal policy standards.", owner: "Michael Torres", runs: 342, successRate: 97.2, lastRun: new Date(Date.now() - 3600000 * 0.25), status: "Active", icon: "file-search", department: "Legal", avgDuration: "4m 32s", documentsProcessed: 1840 },
-  { id: "agent-2", name: "HR Policy Auditor", description: "Continuously monitors HR documents for internal consistency, regulatory compliance, and outdated provisions.", owner: "Sarah Chen", runs: 218, successRate: 95.8, lastRun: new Date(Date.now() - 3600000 * 1), status: "Active", icon: "shield-check", department: "Human Resources", avgDuration: "6m 15s", documentsProcessed: 960 },
+  { id: "agent-2", name: "HR Policy Auditor", description: "Continuously monitors HR documents for internal consistency, regulatory compliance, and outdated provisions.", owner: "Kajal Thakkar", runs: 218, successRate: 95.8, lastRun: new Date(Date.now() - 3600000 * 1), status: "Active", icon: "shield-check", department: "Human Resources", avgDuration: "6m 15s", documentsProcessed: 960 },
   { id: "agent-3", name: "Security Compliance Agent", description: "Validates security documentation against SOC 2, GDPR, and ISO 27001 frameworks. Flags gaps and generates remediation tasks.", owner: "James Rivera", runs: 156, successRate: 99.1, lastRun: new Date(Date.now() - 3600000 * 3), status: "Idle", icon: "lock", department: "Security", avgDuration: "8m 48s", documentsProcessed: 720 },
   { id: "agent-4", name: "Code Review Agent", description: "Reviews pull requests for adherence to engineering standards, security vulnerabilities, and performance concerns.", owner: "Priya Patel", runs: 1247, successRate: 93.4, lastRun: new Date(Date.now() - 3600000 * 0.5), status: "Running", icon: "code", department: "Engineering", avgDuration: "2m 10s", documentsProcessed: 4200 },
-  { id: "agent-5", name: "Resume Skill Gap Agent", description: "Analyzes candidate resumes against job requirements, identifies skill gaps, and generates structured hiring recommendations.", owner: "Sarah Chen", runs: 89, successRate: 91.7, lastRun: new Date(Date.now() - 86400000 * 1), status: "Idle", icon: "users", department: "Human Resources", avgDuration: "1m 45s", documentsProcessed: 340 },
+  { id: "agent-5", name: "Resume Skill Gap Agent", description: "Analyzes candidate resumes against job requirements, identifies skill gaps, and generates structured hiring recommendations.", owner: "Kajal Thakkar", runs: 89, successRate: 91.7, lastRun: new Date(Date.now() - 86400000 * 1), status: "Idle", icon: "users", department: "Human Resources", avgDuration: "1m 45s", documentsProcessed: 340 },
   { id: "agent-6", name: "Vendor Risk Agent", description: "Evaluates vendor risk profiles based on contract terms, financial health indicators, and compliance certifications.", owner: "Michael Torres", runs: 134, successRate: 96.5, lastRun: new Date(Date.now() - 3600000 * 6), status: "Active", icon: "alert-triangle", department: "Legal", avgDuration: "5m 22s", documentsProcessed: 580 },
-  { id: "agent-7", name: "Document Summarizer", description: "Generates concise, structured summaries of long documents with key findings, action items, and risk indicators.", owner: "Alex Morgan", runs: 892, successRate: 98.3, lastRun: new Date(Date.now() - 3600000 * 0.1), status: "Active", icon: "file-text", department: "Operations", avgDuration: "1m 15s", documentsProcessed: 3200 },
-  { id: "agent-8", name: "Knowledge Health Monitor", description: "Tracks document freshness, identifies stale knowledge, detects missing owners, and monitors cross-reference integrity.", owner: "Alex Morgan", runs: 67, successRate: 100, lastRun: new Date(Date.now() - 3600000 * 12), status: "Idle", icon: "activity", department: "Operations", avgDuration: "12m 30s", documentsProcessed: 12482 },
+  { id: "agent-7", name: "Document Summarizer", description: "Generates concise, structured summaries of long documents with key findings, action items, and risk indicators.", owner: "Razil Christian", runs: 892, successRate: 98.3, lastRun: new Date(Date.now() - 3600000 * 0.1), status: "Active", icon: "file-text", department: "Operations", avgDuration: "1m 15s", documentsProcessed: 3200 },
+  { id: "agent-8", name: "Knowledge Health Monitor", description: "Tracks document freshness, identifies stale knowledge, detects missing owners, and monitors cross-reference integrity.", owner: "Razil Christian", runs: 67, successRate: 100, lastRun: new Date(Date.now() - 3600000 * 12), status: "Idle", icon: "activity", department: "Operations", avgDuration: "12m 30s", documentsProcessed: 12482 },
 ];
 
 // ── Agent Nodes (for Contract Review Agent detail) ──
@@ -133,13 +133,13 @@ export const contractReviewNodes: AgentNode[] = [
 
 // ── Workflows ──
 export const workflows: Workflow[] = [
-  { id: "wf-1", name: "New Document Processing Pipeline", description: "Automatically classify, analyze, and index newly uploaded documents.", status: "Active", runs: 1248, lastRun: new Date(Date.now() - 3600000 * 0.5), owner: "Alex Morgan", department: "Operations", nodes: 7, successRate: 98.1 },
-  { id: "wf-2", name: "Quarterly Policy Audit", description: "Systematic review of all policy documents for consistency and compliance.", status: "Active", runs: 12, lastRun: new Date(Date.now() - 86400000 * 7), owner: "Sarah Chen", department: "Human Resources", nodes: 9, successRate: 100 },
+  { id: "wf-1", name: "New Document Processing Pipeline", description: "Automatically classify, analyze, and index newly uploaded documents.", status: "Active", runs: 1248, lastRun: new Date(Date.now() - 3600000 * 0.5), owner: "Razil Christian", department: "Operations", nodes: 7, successRate: 98.1 },
+  { id: "wf-2", name: "Quarterly Policy Audit", description: "Systematic review of all policy documents for consistency and compliance.", status: "Active", runs: 12, lastRun: new Date(Date.now() - 86400000 * 7), owner: "Kajal Thakkar", department: "Human Resources", nodes: 9, successRate: 100 },
   { id: "wf-3", name: "Vendor Onboarding Review", description: "End-to-end vendor contract review with risk assessment and compliance checks.", status: "Active", runs: 89, lastRun: new Date(Date.now() - 86400000 * 2), owner: "Michael Torres", department: "Legal", nodes: 8, successRate: 96.6 },
   { id: "wf-4", name: "Incident Response Triage", description: "Automated classification and routing of security incidents.", status: "Active", runs: 34, lastRun: new Date(Date.now() - 3600000 * 18), owner: "James Rivera", department: "Security", nodes: 6, successRate: 97.1 },
-  { id: "wf-5", name: "Resume Screening Pipeline", description: "Automated resume parsing, skill extraction, and candidate scoring.", status: "Draft", runs: 0, lastRun: new Date(Date.now() - 86400000 * 14), owner: "Sarah Chen", department: "Human Resources", nodes: 5, successRate: 0 },
+  { id: "wf-5", name: "Resume Screening Pipeline", description: "Automated resume parsing, skill extraction, and candidate scoring.", status: "Draft", runs: 0, lastRun: new Date(Date.now() - 86400000 * 14), owner: "Kajal Thakkar", department: "Human Resources", nodes: 5, successRate: 0 },
   { id: "wf-6", name: "Compliance Report Generator", description: "Generate monthly compliance reports from audit data and policy analysis.", status: "Active", runs: 24, lastRun: new Date(Date.now() - 86400000 * 4), owner: "James Rivera", department: "Security", nodes: 8, successRate: 100 },
-  { id: "wf-7", name: "Knowledge Base Refresh", description: "Periodic scan of all documents for staleness and accuracy.", status: "Paused", runs: 6, lastRun: new Date(Date.now() - 86400000 * 30), owner: "Alex Morgan", department: "Operations", nodes: 5, successRate: 83.3 },
+  { id: "wf-7", name: "Knowledge Base Refresh", description: "Periodic scan of all documents for staleness and accuracy.", status: "Paused", runs: 6, lastRun: new Date(Date.now() - 86400000 * 30), owner: "Razil Christian", department: "Operations", nodes: 5, successRate: 83.3 },
   { id: "wf-8", name: "Contract Renewal Alert", description: "Monitor contract expiration dates and trigger renewal workflows.", status: "Active", runs: 156, lastRun: new Date(Date.now() - 86400000 * 1), owner: "Michael Torres", department: "Legal", nodes: 4, successRate: 99.4 },
   { id: "wf-9", name: "Engineering Docs Sync", description: "Synchronize engineering documentation from GitHub repos and internal wikis.", status: "Active", runs: 340, lastRun: new Date(Date.now() - 3600000 * 6), owner: "Priya Patel", department: "Engineering", nodes: 6, successRate: 95.3 },
   { id: "wf-10", name: "Board Deck Preparation", description: "Compile and summarize key metrics for quarterly board presentations.", status: "Draft", runs: 0, lastRun: new Date(Date.now() - 86400000 * 60), owner: "Rachel Kim", department: "Finance", nodes: 7, successRate: 0 },
@@ -147,9 +147,9 @@ export const workflows: Workflow[] = [
 
 // ── Activity Events ──
 export const activityEvents: ActivityEvent[] = [
-  { id: "act-1", who: "Alex Morgan", isAI: false, action: "Approved", resource: "Casual Leave Policy Review", agent: "HR Policy Auditor", timestamp: new Date(Date.now() - 60000 * 2), result: "Success" },
+  { id: "act-1", who: "Razil Christian", isAI: false, action: "Approved", resource: "Casual Leave Policy Review", agent: "HR Policy Auditor", timestamp: new Date(Date.now() - 60000 * 2), result: "Success" },
   { id: "act-2", who: "Contract Review Agent", isAI: true, action: "Analyzed", resource: "42 vendor contracts", agent: "Contract Review Agent", timestamp: new Date(Date.now() - 60000 * 15), result: "Success", details: "3 risks identified across 42 contracts" },
-  { id: "act-3", who: "Sarah Chen", isAI: false, action: "Uploaded", resource: "Employee Handbook v3.2", timestamp: new Date(Date.now() - 3600000 * 1), result: "Success" },
+  { id: "act-3", who: "Kajal Thakkar", isAI: false, action: "Uploaded", resource: "Employee Handbook v3.2", timestamp: new Date(Date.now() - 3600000 * 1), result: "Success" },
   { id: "act-4", who: "Knowledge Health Monitor", isAI: true, action: "Flagged", resource: "Security Incident Response Playbook", agent: "Knowledge Health Monitor", timestamp: new Date(Date.now() - 3600000 * 2), result: "Success", details: "Document not reviewed in 11 months" },
   { id: "act-5", who: "Priya Patel", isAI: false, action: "Modified", resource: "API Architecture Guidelines", timestamp: new Date(Date.now() - 3600000 * 4), result: "Success" },
   { id: "act-6", who: "HR Policy Auditor", isAI: true, action: "Analyzed", resource: "HR Leave Policy", agent: "HR Policy Auditor", timestamp: new Date(Date.now() - 3600000 * 5), result: "Success", details: "1 conflict detected across 3 HR sources" },
@@ -157,11 +157,11 @@ export const activityEvents: ActivityEvent[] = [
   { id: "act-8", who: "Code Review Agent", isAI: true, action: "Analyzed", resource: "PR #847 — Auth refactor", agent: "Code Review Agent", timestamp: new Date(Date.now() - 3600000 * 10), result: "Success", details: "2 suggestions, 0 blockers" },
   { id: "act-9", who: "James Rivera", isAI: false, action: "Created", resource: "Incident Response Triage workflow", timestamp: new Date(Date.now() - 86400000 * 1), result: "Success" },
   { id: "act-10", who: "Document Summarizer", isAI: true, action: "Analyzed", resource: "Q3 2024 Financial Summary", agent: "Document Summarizer", timestamp: new Date(Date.now() - 86400000 * 1), result: "Success" },
-  { id: "act-11", who: "Alex Morgan", isAI: false, action: "Resolved", resource: "Code review requirement conflict", timestamp: new Date(Date.now() - 86400000 * 2), result: "Success" },
+  { id: "act-11", who: "Razil Christian", isAI: false, action: "Resolved", resource: "Code review requirement conflict", timestamp: new Date(Date.now() - 86400000 * 2), result: "Success" },
   { id: "act-12", who: "Security Compliance Agent", isAI: true, action: "Triggered", resource: "SOC 2 gap analysis", agent: "Security Compliance Agent", timestamp: new Date(Date.now() - 86400000 * 3), result: "Pending", details: "Analysis in progress — estimated 8 minutes remaining" },
   { id: "act-13", who: "Rachel Kim", isAI: false, action: "Uploaded", resource: "Q3 2024 Financial Summary", timestamp: new Date(Date.now() - 86400000 * 4), result: "Success" },
   { id: "act-14", who: "Vendor Risk Agent", isAI: true, action: "Flagged", resource: "3 vendor contracts expiring within 30 days", agent: "Vendor Risk Agent", timestamp: new Date(Date.now() - 86400000 * 5), result: "Success" },
-  { id: "act-15", who: "Sarah Chen", isAI: false, action: "Approved", resource: "Updated onboarding checklist", timestamp: new Date(Date.now() - 86400000 * 6), result: "Success" },
+  { id: "act-15", who: "Kajal Thakkar", isAI: false, action: "Approved", resource: "Updated onboarding checklist", timestamp: new Date(Date.now() - 86400000 * 6), result: "Success" },
 ];
 
 // ── Knowledge Graph ──
@@ -170,7 +170,7 @@ export const knowledgeNodes: KnowledgeNode[] = [
   { id: "kn-2", label: "HR Leave Policy", type: "policy", description: "Defines casual leave entitlement and approval rules", connections: 5, lastUpdated: new Date(Date.now() - 3600000 * 5), health: "healthy" },
   { id: "kn-3", label: "Human Resources", type: "department", description: "HR department managing people operations", connections: 12, lastUpdated: new Date(Date.now() - 3600000 * 1) },
   { id: "kn-4", label: "HR Policy Auditor", type: "agent", description: "AI agent monitoring HR document consistency", connections: 6, lastUpdated: new Date(Date.now() - 3600000 * 1), health: "healthy" },
-  { id: "kn-5", label: "Sarah Chen", type: "person", description: "Head of Human Resources", connections: 9, lastUpdated: new Date(Date.now() - 3600000 * 1) },
+  { id: "kn-5", label: "Kajal Thakkar", type: "person", description: "Head of Human Resources", connections: 9, lastUpdated: new Date(Date.now() - 3600000 * 1) },
   { id: "kn-6", label: "Security Playbook", type: "document", description: "Incident response procedures and protocols", connections: 4, lastUpdated: new Date(Date.now() - 86400000 * 330), health: "outdated" },
   { id: "kn-7", label: "Vendor Contracts", type: "project", description: "Active vendor management and contract portfolio", connections: 7, lastUpdated: new Date(Date.now() - 86400000 * 3) },
   { id: "kn-8", label: "Engineering Standards", type: "document", description: "Development best practices and guidelines", connections: 6, lastUpdated: new Date(Date.now() - 86400000 * 14), health: "at-risk" },

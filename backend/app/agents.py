@@ -32,7 +32,7 @@ DEFAULT_AGENTS = [
         "id": "agent-2",
         "name": "HR Policy Auditor",
         "description": "Continuously monitors HR documents for internal consistency, regulatory compliance, and outdated provisions.",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "runs": 218,
         "successRate": 95.8,
         "lastRun": "2026-08-14T19:30:00Z",
@@ -74,7 +74,7 @@ DEFAULT_AGENTS = [
         "id": "agent-5",
         "name": "Knowledge Health Monitor",
         "description": "Tracks document freshness, identifies stale knowledge, detects missing owners, and monitors cross-reference integrity.",
-        "owner": "Alex Morgan",
+        "owner": "Razil Christian",
         "runs": 67,
         "successRate": 100.0,
         "lastRun": "2026-08-14T12:00:00Z",
@@ -94,7 +94,7 @@ DEFAULT_WORKFLOWS = [
         "status": "Active",
         "runs": 1248,
         "lastRun": "2026-08-14T21:30:00Z",
-        "owner": "Alex Morgan",
+        "owner": "Razil Christian",
         "department": "Operations",
         "nodes": 7,
         "successRate": 98.1,
@@ -106,7 +106,7 @@ DEFAULT_WORKFLOWS = [
         "status": "Active",
         "runs": 12,
         "lastRun": "2026-08-07T10:00:00Z",
-        "owner": "Sarah Chen",
+        "owner": "Kajal Thakkar",
         "department": "Human Resources",
         "nodes": 9,
         "successRate": 100.0,
@@ -148,7 +148,7 @@ def create_agent(
     name: str,
     description: str,
     department: str,
-    owner: str = "Dev Anand",
+    owner: str = "Shivam Upadhyay",
 ) -> dict[str, Any]:
     """Create and persist a new custom AI agent in MongoDB."""
     seed_if_needed()
@@ -195,7 +195,7 @@ def create_agent(
     return clean_agent
 
 
-def run_agent(agent_id: str, actor: str = "Sarah Chen") -> dict[str, Any]:
+def run_agent(agent_id: str, actor: str = "Kajal Thakkar") -> dict[str, Any]:
     """Execute an agent pass over real MongoDB documents."""
     seed_if_needed()
     col = db.collection(AGENTS_COLLECTION)
@@ -291,7 +291,7 @@ def list_workflows() -> list[dict[str, Any]]:
     return list(col.find({}, {"_id": 0}))
 
 
-def run_workflow(workflow_id: str, actor: str = "Alex Morgan") -> dict[str, Any]:
+def run_workflow(workflow_id: str, actor: str = "Razil Christian") -> dict[str, Any]:
     """Execute a workflow pipeline pass."""
     seed_if_needed()
     col = db.collection(WORKFLOWS_COLLECTION)

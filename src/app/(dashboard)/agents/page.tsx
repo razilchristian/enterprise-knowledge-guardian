@@ -48,7 +48,7 @@ export default function AgentsPage() {
     setRunningAgentId(agentId);
     setLastResult(null);
     try {
-      const res = await runAgent(agentId, "Sarah Chen (HR Lead)");
+      const res = await runAgent(agentId, "Kajal Thakkar (HR Lead)");
       setLastResult(res);
       await reload();
     } catch (err) {
@@ -64,7 +64,7 @@ export default function AgentsPage() {
 
     setCreating(true);
     try {
-      await createAgent(agentName.trim(), agentDesc.trim(), agentDept, "Dev Anand");
+      await createAgent(agentName.trim(), agentDesc.trim(), agentDept, "Shivam Upadhyay");
       setAgentName("");
       setAgentDesc("");
       setShowCreateModal(false);

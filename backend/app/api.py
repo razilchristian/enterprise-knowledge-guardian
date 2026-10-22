@@ -229,7 +229,7 @@ def get_document(document_id: str) -> dict[str, Any]:
 async def upload_document(
     file: UploadFile = File(...),
     department: str = Form("Human Resources"),
-    owner: str = Form("Dev Anand"),
+    owner: str = Form("Shivam Upadhyay"),
 ) -> dict[str, Any]:
     """Upload and ingest a new PDF document into MongoDB Atlas."""
     if not file.filename.endswith(".pdf"):
@@ -446,7 +446,7 @@ class CreateAgentRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     description: str = Field(..., min_length=5, max_length=300)
     department: str = Field(..., min_length=2, max_length=50)
-    owner: str | None = "Dev Anand"
+    owner: str | None = "Shivam Upadhyay"
 
 
 @app.get("/api/agents")
@@ -462,7 +462,7 @@ def create_agent_route(request: CreateAgentRequest) -> dict[str, Any]:
         name=request.name,
         description=request.description,
         department=request.department,
-        owner=request.owner or "Dev Anand",
+        owner=request.owner or "Shivam Upadhyay",
     )
     return {"agent": new_agent}
 
@@ -471,7 +471,7 @@ def create_agent_route(request: CreateAgentRequest) -> dict[str, Any]:
 @app.post("/api/agents/{agent_id}/run")
 def run_agent_route(agent_id: str, request: RunRequest | None = None) -> dict[str, Any]:
     """Execute a real AI agent pass over the enterprise corpus."""
-    actor = request.actor if request and request.actor else "Sarah Chen"
+    actor = request.actor if request and request.actor else "Kajal Thakkar"
     result = agents.run_agent(agent_id, actor=actor)
     return result
 
@@ -485,6 +485,6 @@ def list_workflows_route() -> dict[str, Any]:
 @app.post("/api/workflows/{workflow_id}/run")
 def run_workflow_route(workflow_id: str, request: RunRequest | None = None) -> dict[str, Any]:
     """Execute a pipeline workflow pass."""
-    actor = request.actor if request and request.actor else "Alex Morgan"
+    actor = request.actor if request and request.actor else "Razil Christian"
     result = agents.run_workflow(workflow_id, actor=actor)
     return result

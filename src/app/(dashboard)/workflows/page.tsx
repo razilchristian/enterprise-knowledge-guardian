@@ -27,7 +27,7 @@ export default function WorkflowsPage() {
     setRunningWfId(workflowId);
     setLastResult(null);
     try {
-      const res = await runWorkflow(workflowId, "Alex Morgan");
+      const res = await runWorkflow(workflowId, "Razil Christian");
       setLastResult(res);
       await reload();
     } catch (err) {
