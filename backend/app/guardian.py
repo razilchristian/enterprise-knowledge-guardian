@@ -55,6 +55,7 @@ class Answer:
     conflict: Conflict | None
     citations: list[str]
     hits_considered: int
+    sources: list[dict] = field(default_factory=list)
     # Set when a newer policy explicitly retires the documents that disagreed.
     # The answer is settled; the legacy documents still need editing.
     superseded_by: str | None = None
@@ -274,6 +275,19 @@ def ask(question: str, *, limit: int = 8) -> Answer:
             superseded_by = governing
             conflict = None
 
+    sources = [
+        {
+            "citation": hit.citation(),
+            "document": hit.document,
+            "section": hit.section,
+            "department": hit.department,
+            "owner": hit.owner,
+            "text": hit.text,
+            "score": round(float(hit.score), 3) if hasattr(hit, "score") and hit.score else 0.0,
+        }
+        for hit in hits
+    ]
+
     return Answer(
         question=question,
         has_conflict=has_conflict,
@@ -282,6 +296,7 @@ def ask(question: str, *, limit: int = 8) -> Answer:
         superseded_by=superseded_by,
         citations=data.get("citations", []),
         hits_considered=len(hits),
+        sources=sources,
     )
 
 

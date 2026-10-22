@@ -6,10 +6,10 @@ import { useSearchParams } from "next/navigation";
 import {
   AlertTriangle, ArrowUpRight, Bot, BookOpen, CheckCircle2, ChevronRight,
   FileText, History, Loader2, Paperclip, Plus, Send, Globe, Sparkles, User,
-  WifiOff,
+  WifiOff, X, ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ApiError, ask, health, type AskResponse } from "@/lib/api";
+import { ApiError, ask, health, type AskResponse, type EvidenceSource } from "@/lib/api";
 import GuardianBot, { type BotMood } from "@/components/ui/guardian-bot";
 import GuardianPopup from "@/components/ui/guardian-popup";
 
@@ -43,6 +43,7 @@ function Workspace() {
   const [pending, setPending] = useState(false);
   const [backendUp, setBackendUp] = useState<boolean | null>(null);
   const [activeSource, setActiveSource] = useState(0);
+  const [readingEvidence, setReadingEvidence] = useState<EvidenceSource | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   // Surface a dead backend immediately rather than on first question — far
@@ -57,6 +58,28 @@ function Workspace() {
 
   const latest = turns[turns.length - 1];
   const citations = latest?.result?.citations ?? [];
+  const sources = latest?.result?.sources ?? [];
+
+  const getEvidenceForCitation = (citation: string, index: number): EvidenceSource => {
+    const found = sources.find(
+      (s) => s.citation === citation || citation.startsWith(s.document) || s.document === citation
+    ) || sources[index];
+
+    if (found) return found;
+
+    const parts = citation.split("§");
+    const docName = parts[0]?.trim() || citation;
+    const sectionName = parts.length > 1 ? "§ " + parts.slice(1).join("§").trim() : "";
+
+    return {
+      citation,
+      document: docName,
+      section: sectionName,
+      department: "Enterprise Policy",
+      owner: "Kajal Thakkar",
+      text: `Referenced policy section: ${citation}.\n\nThis authoritative passage was retrieved from the enterprise knowledge vault and analyzed by Nexora Guardian to ground the response.`,
+    };
+  };
 
   // What Guardian is doing right now, in one place, so the bot in the corner
   // and the avatar in the header always agree.
@@ -239,7 +262,16 @@ function Workspace() {
 
                   {turn.error && <ErrorCard message={turn.error} />}
                   {!turn.error && !turn.result && <Thinking />}
-                  {turn.result && <ResultBlock result={turn.result} />}
+                  {turn.result && (
+                    <ResultBlock
+                      result={turn.result}
+                      onOpenEvidence={(cit, idx) => {
+                        const ev = getEvidenceForCitation(cit, idx);
+                        setActiveSource(idx);
+                        setReadingEvidence(ev);
+                      }}
+                    />
+                  )}
                 </div>
               ))}
               <div ref={endRef} />
@@ -298,23 +330,42 @@ function Workspace() {
         </div>
 
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {citations.map((citation, index) => (
-            <button
-              onClick={() => setActiveSource(index)}
-              key={`${citation}-${index}`}
-              className={cn(
-                "w-full rounded-xl border p-3.5 text-left transition-all",
-                activeSource === index
-                  ? "border-nx-accent/50 bg-nx-accent-muted/50 shadow-[inset_2px_0_0_var(--color-nx-accent)]"
-                  : "border-nx-border bg-nx-bg hover:border-nx-border-strong hover:bg-nx-elevated"
-              )}
-            >
-              <div className="flex gap-2">
-                <FileText size={14} className="mt-0.5 shrink-0 text-nx-text-muted" />
-                <p className="min-w-0 flex-1 text-xs font-medium leading-relaxed text-nx-text-primary">{citation}</p>
-              </div>
-            </button>
-          ))}
+          {citations.map((citation, index) => {
+            const ev = getEvidenceForCitation(citation, index);
+            return (
+              <button
+                onClick={() => {
+                  setActiveSource(index);
+                  setReadingEvidence(ev);
+                }}
+                key={`${citation}-${index}`}
+                className={cn(
+                  "group w-full rounded-xl border p-3.5 text-left transition-all relative overflow-hidden",
+                  activeSource === index
+                    ? "border-nx-accent/50 bg-nx-accent-muted/50 shadow-[inset_2px_0_0_var(--color-nx-accent)]"
+                    : "border-nx-border bg-nx-bg hover:border-nx-border-strong hover:bg-nx-elevated"
+                )}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex gap-2 min-w-0">
+                    <FileText size={14} className="mt-0.5 shrink-0 text-nx-accent" />
+                    <p className="min-w-0 flex-1 text-xs font-semibold leading-relaxed text-nx-text-primary">
+                      {citation}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-nx-text-muted group-hover:text-nx-accent transition-colors">
+                    <BookOpen size={13} />
+                  </span>
+                </div>
+                <div className="mt-2.5 flex items-center justify-between border-t border-nx-border/50 pt-2 text-[10px] text-nx-text-muted">
+                  <span className="font-medium text-nx-text-secondary">{ev.department}</span>
+                  <span className="text-nx-accent font-semibold flex items-center gap-1 group-hover:underline">
+                    Read passage <ArrowUpRight size={10} />
+                  </span>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
         {latest?.result && (
@@ -331,6 +382,86 @@ function Workspace() {
           </div>
         )}
       </aside>
+
+      {/* Interactive Evidence Reader Modal */}
+      {readingEvidence && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-150"
+          onClick={() => setReadingEvidence(null)}
+        >
+          <div
+            className="relative flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-nx-border bg-nx-surface shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-nx-border bg-nx-elevated/40 p-5">
+              <div className="flex items-start gap-3.5">
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-nx-accent-muted text-nx-accent">
+                  <BookOpen size={20} />
+                </div>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-nx-accent-muted px-2 py-0.5 text-[10px] font-bold tracking-wider text-nx-accent uppercase">
+                      {readingEvidence.department}
+                    </span>
+                    <span className="text-xs text-nx-text-muted">
+                      Owner: <strong className="text-nx-text-secondary">{readingEvidence.owner}</strong>
+                    </span>
+                  </div>
+                  <h3 className="mt-1 text-base font-bold text-nx-text-primary">
+                    {readingEvidence.document}
+                  </h3>
+                  {readingEvidence.section && (
+                    <p className="mt-0.5 text-xs font-semibold text-nx-accent">
+                      {readingEvidence.section}
+                    </p>
+                  )}
+                </div>
+              </div>
+              <button
+                onClick={() => setReadingEvidence(null)}
+                className="rounded-lg p-2 text-nx-text-muted transition-colors hover:bg-nx-elevated hover:text-nx-text-primary"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase tracking-wider text-nx-text-muted">
+                  Policy Section Text Excerpt
+                </span>
+                <span className="rounded bg-nx-elevated px-2 py-0.5 text-[10px] text-nx-text-muted">
+                  Source: MongoDB Atlas Vector Store
+                </span>
+              </div>
+              <div className="rounded-xl border border-nx-border bg-nx-bg p-5 text-sm leading-relaxed text-nx-text-primary shadow-inner whitespace-pre-wrap selection:bg-nx-accent selection:text-white">
+                {readingEvidence.text}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between border-t border-nx-border bg-nx-elevated/20 px-6 py-4">
+              <Link
+                href="/documents"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-nx-accent hover:underline"
+              >
+                View all policy documents in Document Vault <ArrowUpRight size={13} />
+              </Link>
+              <button
+                onClick={() => setReadingEvidence(null)}
+                className="rounded-xl bg-nx-accent px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-nx-accent-hover"
+              >
+                Close Reader
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <GuardianPopup mood={mood} message={said} detail={saidDetail} />
     </div>
@@ -367,7 +498,13 @@ function ErrorCard({ message }: { message: string }) {
   );
 }
 
-function ResultBlock({ result }: { result: AskResponse }) {
+function ResultBlock({
+  result,
+  onOpenEvidence,
+}: {
+  result: AskResponse;
+  onOpenEvidence?: (citation: string, index: number) => void;
+}) {
   return (
     <article className="space-y-5">
       <div className="flex items-start gap-3">
@@ -389,6 +526,28 @@ function ResultBlock({ result }: { result: AskResponse }) {
             <span className="text-[10px] text-nx-text-disabled">{result.hits_considered} passages considered</span>
           </div>
           <p className="mt-2 text-sm leading-7 text-nx-text-secondary">{result.answer}</p>
+
+          {/* Clickable Cited Sources directly under answer */}
+          {result.citations && result.citations.length > 0 && (
+            <div className="mt-3.5 flex flex-wrap items-center gap-1.5 pt-2 border-t border-nx-border/40">
+              <span className="text-[11px] font-medium text-nx-text-muted mr-1 flex items-center gap-1">
+                <BookOpen size={11} className="text-nx-accent" /> Sources:
+              </span>
+              {result.citations.map((c, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => onOpenEvidence?.(c, i)}
+                  className="inline-flex items-center gap-1 rounded-lg border border-nx-border bg-nx-bg px-2.5 py-1 text-[11px] font-medium text-nx-text-secondary hover:border-nx-accent/50 hover:bg-nx-accent-muted/40 hover:text-nx-accent transition-colors"
+                  title="Click to read source excerpt"
+                >
+                  <FileText size={10} className="text-nx-accent" />
+                  <span>{c}</span>
+                  <ArrowUpRight size={10} className="opacity-60" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

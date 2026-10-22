@@ -36,12 +36,23 @@ export interface DetectedConflict {
   claims: ConflictClaim[];
 }
 
+export interface EvidenceSource {
+  citation: string;
+  document: string;
+  section: string;
+  department: string;
+  owner: string;
+  text: string;
+  score?: number;
+}
+
 export interface AskResponse {
   question: string;
   has_conflict: boolean;
   answer: string;
   conflict: DetectedConflict | null;
   citations: string[];
+  sources?: EvidenceSource[];
   hits_considered: number;
   /**
    * Set when a newer policy explicitly retired the documents that disagreed.
